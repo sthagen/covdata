@@ -5,17 +5,20 @@
 # covdata <img src="man/figures/hex-covdata.png" align="right" width="240">
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/kjhealy/covdata.svg?branch=master)](https://travis-ci.com/kjhealy/covdata)
+[![R build status](https://github.com/kjhealy/covdata/workflows/R-CMD-check/badge.svg)](https://github.com/kjhealy/covdata/actions)
 <!-- badges: end -->
 
-`covdata` is a data package for R. It provides COVID-19 case data from three sources: 
+`covdata` is a data package for R. It provides COVID-19 case data from four sources: 
 
 - National level data from the [European Centers for Disease Control](https://www.ecdc.europa.eu/en).  
 - State-level data for the United States from the [COVID Tracking Project](https://covidtracking.com). 
-- State-level and county-level data for the United States from the [_New York Times_](https://github.com/nytimes/covid-19-data). 
+- State-level and county-level data for the United States from the [_New York Times_](https://github.com/nytimes/covid-19-data).
+- Data from the US Centers for Disease Control's [Coronavirus Disease 2019 (COVID-19)-Associated Hospitalization Surveillance Network](https://www.cdc.gov/coronavirus/2019-ncov/covid-data/covidview/index.html) (COVID-NET). See below for details about this network and the scope of its coverage.
+
+The data are provided as-is. More information about collection methods, scope, limits, and possible sources of error in the data can be found in the documentation provided by their respective sources. (Follow the links above.)
 
 
-Data are current through Friday, April 10, 2020.
+Data are current through Monday, April 20, 2020.
 
 ## Installation
 
@@ -78,7 +81,7 @@ library(tidyverse)
 library(covdata)
 
 covnat
-#> # A tibble: 9,858 x 8
+#> # A tibble: 11,917 x 8
 #> # Groups:   iso3 [205]
 #>    date       cname       iso3  cases deaths  pop_2018 cu_cases cu_deaths
 #>    <date>     <chr>       <chr> <dbl>  <dbl>     <dbl>    <dbl>     <dbl>
@@ -92,19 +95,30 @@ covnat
 #>  8 2019-12-31 Belarus     BLR       0      0   9485386        0         0
 #>  9 2019-12-31 Belgium     BEL       0      0  11422068        0         0
 #> 10 2019-12-31 Brazil      BRA       0      0 209469333        0         0
-#> # … with 9,848 more rows
+#> # … with 11,907 more rows
 ```
 
 ### Draw a log-linear graph of cumulative reported cases
 
 
 ```r
+## Libraries for the graphs
+library(ggrepel)
+library(paletteer)
+library(prismatic)
+
+## Convenince "Not in" operator
+"%nin%" <- function(x, y) {
+  return( !(x %in% y) )
+}
+
+
 ## Countries to highlight
 focus_cn <- c("CHN", "DEU", "GBR", "USA", "IRN", "JPN",
               "KOR", "ITA", "FRA", "ESP", "CHE", "TUR")
 
 ## Colors
-cgroup_cols <- c(prismatic::clr_darken(paletteer_d("ggsci::category20_d3"), 0.2)[1:length(focus_cn)], "gray70")
+cgroup_cols <- c(clr_darken(paletteer_d("ggsci::category20_d3"), 0.2)[1:length(focus_cn)], "gray70")
 
 covnat %>%
   filter(cu_cases > 99) %>%
@@ -140,7 +154,7 @@ covnat %>%
        caption = "Kieran Healy @kjhealy / Data: https://www.ecdc.europa.eu/") +
   theme_minimal()
 #> Don't know how to automatically pick scale for object of type difftime. Defaulting to continuous.
-#> Warning: Removed 2761 rows containing missing values (geom_text_repel).
+#> Warning: Removed 4077 rows containing missing values (geom_text_repel).
 ```
 
 <img src="man/figures/README-example-1.png" title="plot of chunk example" alt="plot of chunk example" width="100%" />
@@ -151,20 +165,20 @@ covnat %>%
 
 ```r
 covus
-#> # A tibble: 27,216 x 11
-#>    date       state fips  measure count pos_neg death_increase hospitalized_in… negative_increa… positive_increa…
-#>    <date>     <chr> <chr> <chr>   <dbl>   <dbl>          <dbl>            <dbl>            <dbl>            <dbl>
-#>  1 2020-04-09 AK    02    positi…   235    7223              0                0              146                9
-#>  2 2020-04-09 AK    02    negati…  6988    7223              0                0              146                9
-#>  3 2020-04-09 AK    02    pending    NA    7223              0                0              146                9
-#>  4 2020-04-09 AK    02    hospit…    NA    7223              0                0              146                9
-#>  5 2020-04-09 AK    02    hospit…    27    7223              0                0              146                9
-#>  6 2020-04-09 AK    02    in_icu…    NA    7223              0                0              146                9
-#>  7 2020-04-09 AK    02    in_icu…    NA    7223              0                0              146                9
-#>  8 2020-04-09 AK    02    on_ven…    NA    7223              0                0              146                9
-#>  9 2020-04-09 AK    02    on_ven…    NA    7223              0                0              146                9
-#> 10 2020-04-09 AK    02    recove…    49    7223              0                0              146                9
-#> # … with 27,206 more rows, and 1 more variable: total_test_results_increase <dbl>
+#> # A tibble: 45,144 x 5
+#>    date       state fips  measure                  count
+#>    <date>     <chr> <chr> <chr>                    <dbl>
+#>  1 2020-04-19 AK    02    positive                   319
+#>  2 2020-04-19 AK    02    negative                  9576
+#>  3 2020-04-19 AK    02    pending                     NA
+#>  4 2020-04-19 AK    02    hospitalized_currently      37
+#>  5 2020-04-19 AK    02    hospitalized_cumulative     36
+#>  6 2020-04-19 AK    02    in_icu_currently            NA
+#>  7 2020-04-19 AK    02    in_icu_cumulative           NA
+#>  8 2020-04-19 AK    02    on_ventilator_currently     NA
+#>  9 2020-04-19 AK    02    on_ventilator_cumulative    NA
+#> 10 2020-04-19 AK    02    recovered                  153
+#> # … with 45,134 more rows
 ```
 
 ### Draw a log-linear graph of cumulative reported US cases
@@ -211,7 +225,8 @@ covus %>%
 #> Warning: Transformation introduced infinite values in continuous y-axis
 
 #> Warning: Transformation introduced infinite values in continuous y-axis
-#> Warning: Removed 1650 rows containing missing values (geom_text_repel).
+#> Warning: Removed 15 row(s) containing missing values (geom_path).
+#> Warning: Removed 2210 rows containing missing values (geom_text_repel).
 ```
 
 <img src="man/figures/README-us-example-1.png" title="plot of chunk us-example" alt="plot of chunk us-example" width="100%" />
@@ -222,7 +237,7 @@ covus %>%
 
 ```r
 nytcovstate
-#> # A tibble: 2,105 x 5
+#> # A tibble: 2,385 x 5
 #>    date       state      fips  cases deaths
 #>    <date>     <chr>      <chr> <dbl>  <dbl>
 #>  1 2020-01-21 Washington 53        1      0
@@ -235,13 +250,13 @@ nytcovstate
 #>  8 2020-01-25 Washington 53        1      0
 #>  9 2020-01-26 Arizona    04        1      0
 #> 10 2020-01-26 California 06        2      0
-#> # … with 2,095 more rows
+#> # … with 2,375 more rows
 ```
 
 
 ```r
 nytcovcounty
-#> # A tibble: 45,880 x 6
+#> # A tibble: 59,249 x 6
 #>    date       county      state      fips  cases deaths
 #>    <date>     <chr>       <chr>      <chr> <dbl>  <dbl>
 #>  1 2020-01-21 Snohomish   Washington 53061     1      0
@@ -254,7 +269,7 @@ nytcovcounty
 #>  8 2020-01-25 Snohomish   Washington 53061     1      0
 #>  9 2020-01-26 Maricopa    Arizona    04013     1      0
 #> 10 2020-01-26 Los Angeles California 06037     1      0
-#> # … with 45,870 more rows
+#> # … with 59,239 more rows
 ```
 
 ### Draw a log-linear graph of cumulative US cases by county
@@ -280,6 +295,147 @@ nytcovcounty %>%
 ```
 
 <img src="man/figures/README-nytplot-1.png" title="plot of chunk nytplot" alt="plot of chunk nytplot" width="100%" />
+
+### US CDC Surveillance Network Data
+This US Centers for Disase Control surveillance network conducts population-based surveillance for laboratory-confirmed COVID-19-associated hospitalizations in children (persons younger than 18 years) and adults in the United States. The current network covers nearly 100 counties in the 10 Emerging Infections Program (EIP) states (CA, CO, CT, GA, MD, MN, NM, NY, OR, and TN) and four additional states through the Influenza Hospitalization Surveillance Project (IA, MI, OH, and UT). The network represents approximately 10% of US population (~32 million people).  Cases are identified by reviewing hospital, laboratory, and admission databases and infection control logs for
+patients hospitalized with a documented positive SARS-CoV-2 test. Data gathered are used to estimate
+age-specific hospitalization rates on a weekly basis and describe characteristics of persons
+hospitalized with COVID-19. Laboratory confirmation is dependent on clinician-ordered SARS-CoV-2
+testing. Therefore, the unadjusted rates provided are likely to be underestimated as
+COVID-19-associated hospitalizations can be missed due to test availability and provider or facility
+testing practices.  COVID-NET hospitalization data are preliminary and subject to change as more data
+become available. All incidence rates are unadjusted. Please use the following citation when
+referencing these data: “COVID-NET: COVID-19-Associated Hospitalization Surveillance Network, Centers
+for Disease Control and Prevention. WEBSITE. Accessed on DATE”.
+
+Thanks to Bob Rudis's [`cdccovidview`](https://github.com/hrbrmstr/cdccovidview) package for making these data tractable to include. 
+
+
+```r
+cdc_hospitalizations
+#> # A tibble: 4,590 x 8
+#>    catchment      network   year  mmwr_year mmwr_week age_category cumulative_rate weekly_rate
+#>    <chr>          <chr>     <chr> <chr>     <chr>     <chr>                  <dbl>       <dbl>
+#>  1 Entire Network COVID-NET 2020  2020      10        0-4 yr                   0           0  
+#>  2 Entire Network COVID-NET 2020  2020      11        0-4 yr                   0           0  
+#>  3 Entire Network COVID-NET 2020  2020      12        0-4 yr                   0           0  
+#>  4 Entire Network COVID-NET 2020  2020      13        0-4 yr                   0.4         0.4
+#>  5 Entire Network COVID-NET 2020  2020      14        0-4 yr                   0.8         0.4
+#>  6 Entire Network COVID-NET 2020  2020      15        0-4 yr                   1.1         0.3
+#>  7 Entire Network COVID-NET 2020  2020      16        0-4 yr                  NA          NA  
+#>  8 Entire Network COVID-NET 2020  2020      17        0-4 yr                  NA          NA  
+#>  9 Entire Network COVID-NET 2020  2020      18        0-4 yr                  NA          NA  
+#> 10 Entire Network COVID-NET 2020  2020      19        0-4 yr                  NA          NA  
+#> # … with 4,580 more rows
+
+cdc_catchments
+#> # A tibble: 17 x 2
+#>    name      area          
+#>  * <chr>     <chr>         
+#>  1 COVID-NET Entire Network
+#>  2 EIP       California    
+#>  3 EIP       Colorado      
+#>  4 EIP       Connecticut   
+#>  5 EIP       Entire Network
+#>  6 EIP       Georgia       
+#>  7 EIP       Maryland      
+#>  8 EIP       Minnesota     
+#>  9 EIP       New Mexico    
+#> 10 EIP       New York      
+#> 11 EIP       Oregon        
+#> 12 EIP       Tennessee     
+#> 13 IHSP      Entire Network
+#> 14 IHSP      Iowa          
+#> 15 IHSP      Michigan      
+#> 16 IHSP      Ohio          
+#> 17 IHSP      Utah
+
+cdc_deaths_by_state
+#> # A tibble: 53 x 7
+#>    state                covid_deaths total_deaths percent_expected_deaths pneumonia_deaths pneumonia_and_covid_deaths all_influenza_deaths_j09_j11
+#>    <chr>                       <int>        <int>                   <dbl>            <int>                      <int>                        <int>
+#>  1 Alabama                        47        10346                    0.89              610                         15                           79
+#>  2 Alaska                          3          747                    0.81               36                          2                            3
+#>  3 Arizona                        62        13201                    0.98              870                         37                           99
+#>  4 Arkansas                       12         6616                    0.93              436                          2                           64
+#>  5 California                    452        58637                    0.96             4788                        246                          527
+#>  6 Colorado                      211         8873                    1.01              670                        131                           85
+#>  7 Connecticut                     0            0                    0                   0                          0                            0
+#>  8 Delaware                        8         1517                    0.74               74                          4                           10
+#>  9 District of Columbia           21         1196                    0.9               118                         21                            6
+#> 10 Florida                       405        46261                    0.99             3232                        239                          266
+#> # … with 43 more rows
+
+nssp_covid_er_reg
+#> # A tibble: 538 x 9
+#>     week num_fac total_ed_visits visits pct_visits visit_type region   source                 year
+#>    <int>   <int> <chr>            <int>      <dbl> <chr>      <chr>    <chr>                 <int>
+#>  1    41     202 130377             814    0.006   ili        Region 1 Emergency Departments  2019
+#>  2    42     202 132385             912    0.00700 ili        Region 1 Emergency Departments  2019
+#>  3    43     202 131866             883    0.00700 ili        Region 1 Emergency Departments  2019
+#>  4    44     203 128256             888    0.00700 ili        Region 1 Emergency Departments  2019
+#>  5    45     203 127466             979    0.008   ili        Region 1 Emergency Departments  2019
+#>  6    46     202 125306            1188    0.009   ili        Region 1 Emergency Departments  2019
+#>  7    47     202 128877            1235    0.01    ili        Region 1 Emergency Departments  2019
+#>  8    48     202 124781            1451    0.012   ili        Region 1 Emergency Departments  2019
+#>  9    49     202 125939            1362    0.011   ili        Region 1 Emergency Departments  2019
+#> 10    50     202 130430            1405    0.011   ili        Region 1 Emergency Departments  2019
+#> # … with 528 more rows
+```
+
+
+
+```r
+
+age_f <- c(
+  "0-4 yr", "5-17 yr", "18-49 yr", 
+  "50-64 yr", "65+ yr", "65-74 yr", 
+  "75-84 yr", "85+")
+
+cdc_hospitalizations %>%
+  mutate(start = cdccovidview::mmwr_week_to_date(mmwr_year, mmwr_week)) %>% 
+  filter(!is.na(weekly_rate)) %>% 
+  filter(catchment == "Entire Network") %>% 
+  select(start, network, age_category, weekly_rate) %>%  
+  filter(age_category != "Overall") %>% 
+  mutate(age_category = factor(age_category, levels = age_f)) %>% 
+  ggplot() +
+  geom_line(aes(start, weekly_rate)) +
+  scale_x_date(
+    date_breaks = "2 weeks", date_labels = "%b\n%d"
+  ) +
+  facet_grid(network ~ age_category) +
+  labs(x = NULL, y = "Rates per 100,000 pop",
+    title = "COVID-NET Weekly Rates by Network and Age Group",
+    subtitle = "Courtesy Bob Rudis's cdccovidview",
+    caption = sprintf("Source: COVID-NET: COVID-19-Associated Hospitalization Surveillance Network, Centers for Disease Control and Prevention.\n<https://gis.cdc.gov/grasp/COVIDNet/COVID19_3.html>; Accessed on %s", Sys.Date())) +
+  theme_minimal()
+```
+
+<img src="man/figures/README-cdc-example-1.png" title="plot of chunk cdc-example" alt="plot of chunk cdc-example" width="100%" />
+
+
+### Citing the package
+
+
+```r
+citation("covdata")
+#> 
+#> To cite the package `covdata` in publications use:
+#> 
+#>   Kieran Healy. 2020. covdata: COVID-19 Case and Mortality Time Series. R package version 0.1.0,
+#>   <http://kjhealy.github.io/covdata>.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {covdata: COVID-19 Case and Mortality Time Series},
+#>     author = {Kieran Healy},
+#>     year = {2020},
+#>     note = {R package version 0.1.0},
+#>     url = {http://kjhealy.github.io/covdata},
+#>   }
+```
 
 
 Mask icon in hex logo by [Freepik](https://www.flaticon.com/authors/freepik).
