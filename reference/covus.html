@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>COVID-19 data for the USA, current as of Friday, April 10, 2020 — covus • covdata</title>
+<title>COVID-19 data for the USA, current as of Wednesday, April 15, 2020 — covus • covdata</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="COVID-19 data for the USA, current as of Friday, April 10, 2020 — covus" />
+<meta property="og:title" content="COVID-19 data for the USA, current as of Wednesday, April 15, 2020 — covus" />
 <meta property="og:description" content="A dataset containing US state-level data on COVID-19" />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9000</span>
       </span>
     </div>
 
@@ -108,8 +108,8 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>COVID-19 data for the USA, current as of Friday, April 10, 2020</h1>
-    
+    <h1>COVID-19 data for the USA, current as of Wednesday, April 15, 2020</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kjhealy/covdata/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>covus.Rd</code></div>
     </div>
 
@@ -122,24 +122,40 @@
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A tibble with 27216 rows and 11 columns</p><dl'>
+    <p>A tibble with 41112 rows and 5 columns</p><dl'>
 <dt>date</dt><dd><p>Date in YYYY-MM-DD format (date)</p></dd>
 <dt>state</dt><dd><p>Two letter State abbreviation (character)</p></dd>
 <dt>fips</dt><dd><p>State FIPS code (character)</p></dd>
 <dt>measure</dt><dd><p>Outcome measure for this date</p></dd>
 <dt>count</dt><dd><p>Count of measure</p></dd>
-<dt>pos_neg</dt><dd><p></p></dd>
-<dt>death_increase</dt><dd><p></p></dd>
-<dt>hospitalized_increase</dt><dd><p></p></dd>
-<dt>negative_increase</dt><dd><p></p></dd>
-<dt>positive_increase</dt><dd><p></p></dd>
-<dt>total_test_results_increase</dt><dd><p></p></dd>
 
 </dl>
 
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
     <p>The COVID-19 Tracking Project <a href='https://covidtracking.com'>https://covidtracking.com</a></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The measures tracked by the COVID tracking project are as follows:</p><ul>
+<li><p><code>positive</code> Total cumulative positive test results.</p></li>
+<li><p><code>positive_increase</code> Increase in positive cases from the day before.</p></li>
+<li><p><code>negative</code> Total cumulative negative test results.</p></li>
+<li><p><code>negative_increase</code> Increase in negative cases from the day before.</p></li>
+<li><p><code>pending</code> Tests that have been submitted to a lab but no results have been reported yet.</p></li>
+<li><p><code>hospitalized_currently</code> Total number of people hospitalized on date.</p></li>
+<li><p><code>hospitalized_cumulative</code> Total cumulative number of people hospitalized by date.</p></li>
+<li><p><code>in_icu_currently</code>  Total number of people in intensive care unit on date.</p></li>
+<li><p><code>in_icu_cumulative</code> Total cumulative number of people in intensive care unit by date.</p></li>
+<li><p><code>on_ventilator_currently</code>  Total number of people on ventilator on date.</p></li>
+<li><p><code>on_ventilator_cumulative</code> Total cumulative number of people on ventilator by date.</p></li>
+<li><p><code>recovered</code> Total number recovered.</p></li>
+<li><p><code>death</code> Total number of deaths.</p></li>
+<li><p><code>death_increase</code> Increase in deaths from the day before.</p></li>
+<li><p><code>total_test_results</code> Calculated value (positive + negative) of total test results.</p></li>
+<li><p><code>total_test_results_increase</code> Increase in total test results from the day before
+Not all measures are reported by all states.</p></li>
+</ul>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -156,7 +172,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

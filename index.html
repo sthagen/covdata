@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">covdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9000</span>
       </span>
     </div>
 
@@ -66,20 +66,22 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="covdata" class="section level1">
+<div id="covdata-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#covdata" class="anchor"></a>covdata <img src="reference/figures/hex-covdata.png" align="right" width="240">
+<a href="#covdata-" class="anchor"></a>covdata <img src="reference/figures/hex-covdata.png" align="right" width="240">
 </h1></div>
 <!-- badges: start -->
 
-<p><code>covdata</code> is a data package for R. It provides COVID-19 case data from three sources:</p>
+<p><code>covdata</code> is a data package for R. It provides COVID-19 case data from four sources:</p>
 <ul>
 <li>National level data from the <a href="https://www.ecdc.europa.eu/en">European Centers for Disease Control</a>.<br>
 </li>
 <li>State-level data for the United States from the <a href="https://covidtracking.com">COVID Tracking Project</a>.</li>
 <li>State-level and county-level data for the United States from the <a href="https://github.com/nytimes/covid-19-data"><em>New York Times</em></a>.</li>
+<li>Data from the US Centers for Disease Control’s <a href="https://www.cdc.gov/coronavirus/2019-ncov/covid-data/covidview/index.html">Coronavirus Disease 2019 (COVID-19)-Associated Hospitalization Surveillance Network</a> (COVID-NET). See below for details about this network and the scope of its coverage.</li>
 </ul>
-<p>Data are current through Friday, April 10, 2020.</p>
+<p>The data are provided as-is. More information about collection methods, scope, limits, and possible sources of error in the data can be found in the documentation provided by their respective sources. (Follow the links above.)</p>
+<p>Data are current through Monday, April 20, 2020.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -120,7 +122,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">covdata</span>)
 
 <span class="no">covnat</span>
-<span class="co">#&gt; # A tibble: 9,858 x 8</span>
+<span class="co">#&gt; # A tibble: 11,917 x 8</span>
 <span class="co">#&gt; # Groups:   iso3 [205]</span>
 <span class="co">#&gt;    date       cname       iso3  cases deaths  pop_2018 cu_cases cu_deaths</span>
 <span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span>
@@ -134,17 +136,28 @@
 <span class="co">#&gt;  8 2019-12-31 Belarus     BLR       0      0   9485386        0         0</span>
 <span class="co">#&gt;  9 2019-12-31 Belgium     BEL       0      0  11422068        0         0</span>
 <span class="co">#&gt; 10 2019-12-31 Brazil      BRA       0      0 209469333        0         0</span>
-<span class="co">#&gt; # … with 9,848 more rows</span></pre></div>
+<span class="co">#&gt; # … with 11,907 more rows</span></pre></div>
 </div>
 <div id="draw-a-log-linear-graph-of-cumulative-reported-cases" class="section level3">
 <h3 class="hasAnchor">
 <a href="#draw-a-log-linear-graph-of-cumulative-reported-cases" class="anchor"></a>Draw a log-linear graph of cumulative reported cases</h3>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="co">## Countries to highlight</span>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="co">## Libraries for the graphs</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggrepel</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">paletteer</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">prismatic</span>)
+
+<span class="co">## Convenince "Not in" operator</span>
+<span class="st">"%nin%"</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">y</span>) {
+  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>( !(<span class="no">x</span> <span class="kw">%in%</span> <span class="no">y</span>) )
+}
+
+
+<span class="co">## Countries to highlight</span>
 <span class="no">focus_cn</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CHN"</span>, <span class="st">"DEU"</span>, <span class="st">"GBR"</span>, <span class="st">"USA"</span>, <span class="st">"IRN"</span>, <span class="st">"JPN"</span>,
               <span class="st">"KOR"</span>, <span class="st">"ITA"</span>, <span class="st">"FRA"</span>, <span class="st">"ESP"</span>, <span class="st">"CHE"</span>, <span class="st">"TUR"</span>)
 
 <span class="co">## Colors</span>
-<span class="no">cgroup_cols</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw pkg">prismatic</span><span class="kw ns">::</span><span class="fu">clr_darken</span>(<span class="fu">paletteer_d</span>(<span class="st">"ggsci::category20_d3"</span>), <span class="fl">0.2</span>)[<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">focus_cn</span>)], <span class="st">"gray70"</span>)
+<span class="no">cgroup_cols</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu">clr_darken</span>(<span class="fu">paletteer_d</span>(<span class="st">"ggsci::category20_d3"</span>), <span class="fl">0.2</span>)[<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">focus_cn</span>)], <span class="st">"gray70"</span>)
 
 <span class="no">covnat</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">cu_cases</span> <span class="kw">&gt;</span> <span class="fl">99</span>) <span class="kw">%&gt;%</span>
@@ -180,27 +193,27 @@
        <span class="kw">caption</span> <span class="kw">=</span> <span class="st">"Kieran Healy @kjhealy / Data: https://www.ecdc.europa.eu/"</span>) +
   <span class="fu">theme_minimal</span>()
 <span class="co">#&gt; Don't know how to automatically pick scale for object of type difftime. Defaulting to continuous.</span>
-<span class="co">#&gt; Warning: Removed 2761 rows containing missing values (geom_text_repel).</span></pre></div>
+<span class="co">#&gt; Warning: Removed 4077 rows containing missing values (geom_text_repel).</span></pre></div>
 <p><img src="reference/figures/README-example-1.png" title="plot of chunk example" alt="plot of chunk example" width="100%"></p>
 </div>
 <div id="state-level-data-from-the-covid-tracking-project" class="section level3">
 <h3 class="hasAnchor">
 <a href="#state-level-data-from-the-covid-tracking-project" class="anchor"></a>State-Level Data from the COVID Tracking Project</h3>
 <div class="sourceCode" id="cb8"><pre class="r"><span class="no">covus</span>
-<span class="co">#&gt; # A tibble: 27,216 x 11</span>
-<span class="co">#&gt;    date       state fips  measure count pos_neg death_increase hospitalized_in… negative_increa… positive_increa…</span>
-<span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 2020-04-09 AK    02    positi…   235    7223              0                0              146                9</span>
-<span class="co">#&gt;  2 2020-04-09 AK    02    negati…  6988    7223              0                0              146                9</span>
-<span class="co">#&gt;  3 2020-04-09 AK    02    pending    NA    7223              0                0              146                9</span>
-<span class="co">#&gt;  4 2020-04-09 AK    02    hospit…    NA    7223              0                0              146                9</span>
-<span class="co">#&gt;  5 2020-04-09 AK    02    hospit…    27    7223              0                0              146                9</span>
-<span class="co">#&gt;  6 2020-04-09 AK    02    in_icu…    NA    7223              0                0              146                9</span>
-<span class="co">#&gt;  7 2020-04-09 AK    02    in_icu…    NA    7223              0                0              146                9</span>
-<span class="co">#&gt;  8 2020-04-09 AK    02    on_ven…    NA    7223              0                0              146                9</span>
-<span class="co">#&gt;  9 2020-04-09 AK    02    on_ven…    NA    7223              0                0              146                9</span>
-<span class="co">#&gt; 10 2020-04-09 AK    02    recove…    49    7223              0                0              146                9</span>
-<span class="co">#&gt; # … with 27,206 more rows, and 1 more variable: total_test_results_increase &lt;dbl&gt;</span></pre></div>
+<span class="co">#&gt; # A tibble: 45,144 x 5</span>
+<span class="co">#&gt;    date       state fips  measure                  count</span>
+<span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 2020-04-19 AK    02    positive                   319</span>
+<span class="co">#&gt;  2 2020-04-19 AK    02    negative                  9576</span>
+<span class="co">#&gt;  3 2020-04-19 AK    02    pending                     NA</span>
+<span class="co">#&gt;  4 2020-04-19 AK    02    hospitalized_currently      37</span>
+<span class="co">#&gt;  5 2020-04-19 AK    02    hospitalized_cumulative     36</span>
+<span class="co">#&gt;  6 2020-04-19 AK    02    in_icu_currently            NA</span>
+<span class="co">#&gt;  7 2020-04-19 AK    02    in_icu_cumulative           NA</span>
+<span class="co">#&gt;  8 2020-04-19 AK    02    on_ventilator_currently     NA</span>
+<span class="co">#&gt;  9 2020-04-19 AK    02    on_ventilator_cumulative    NA</span>
+<span class="co">#&gt; 10 2020-04-19 AK    02    recovered                  153</span>
+<span class="co">#&gt; # … with 45,134 more rows</span></pre></div>
 </div>
 <div id="draw-a-log-linear-graph-of-cumulative-reported-us-cases" class="section level3">
 <h3 class="hasAnchor">
@@ -245,7 +258,8 @@
 <span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span>
 
 <span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span>
-<span class="co">#&gt; Warning: Removed 1650 rows containing missing values (geom_text_repel).</span></pre></div>
+<span class="co">#&gt; Warning: Removed 15 row(s) containing missing values (geom_path).</span>
+<span class="co">#&gt; Warning: Removed 2210 rows containing missing values (geom_text_repel).</span></pre></div>
 <p><img src="reference/figures/README-us-example-1.png" title="plot of chunk us-example" alt="plot of chunk us-example" width="100%"></p>
 </div>
 <div id="state-level-and-county-level-cumulative-data-from-the-new-york-times" class="section level3">
@@ -253,7 +267,7 @@
 <a href="#state-level-and-county-level-cumulative-data-from-the-new-york-times" class="anchor"></a>State-Level and County-Level (Cumulative) Data from the <em>New York Times</em>
 </h3>
 <div class="sourceCode" id="cb10"><pre class="r"><span class="no">nytcovstate</span>
-<span class="co">#&gt; # A tibble: 2,105 x 5</span>
+<span class="co">#&gt; # A tibble: 2,385 x 5</span>
 <span class="co">#&gt;    date       state      fips  cases deaths</span>
 <span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 2020-01-21 Washington 53        1      0</span>
@@ -266,9 +280,9 @@
 <span class="co">#&gt;  8 2020-01-25 Washington 53        1      0</span>
 <span class="co">#&gt;  9 2020-01-26 Arizona    04        1      0</span>
 <span class="co">#&gt; 10 2020-01-26 California 06        2      0</span>
-<span class="co">#&gt; # … with 2,095 more rows</span></pre></div>
+<span class="co">#&gt; # … with 2,375 more rows</span></pre></div>
 <div class="sourceCode" id="cb11"><pre class="r"><span class="no">nytcovcounty</span>
-<span class="co">#&gt; # A tibble: 45,880 x 6</span>
+<span class="co">#&gt; # A tibble: 59,249 x 6</span>
 <span class="co">#&gt;    date       county      state      fips  cases deaths</span>
 <span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 2020-01-21 Snohomish   Washington 53061     1      0</span>
@@ -281,7 +295,7 @@
 <span class="co">#&gt;  8 2020-01-25 Snohomish   Washington 53061     1      0</span>
 <span class="co">#&gt;  9 2020-01-26 Maricopa    Arizona    04013     1      0</span>
 <span class="co">#&gt; 10 2020-01-26 Los Angeles California 06037     1      0</span>
-<span class="co">#&gt; # … with 45,870 more rows</span></pre></div>
+<span class="co">#&gt; # … with 59,239 more rows</span></pre></div>
 </div>
 <div id="draw-a-log-linear-graph-of-cumulative-us-cases-by-county" class="section level3">
 <h3 class="hasAnchor">
@@ -303,6 +317,126 @@
 <span class="co">#&gt; Don't know how to automatically pick scale for object of type difftime. Defaulting to continuous.</span>
 <span class="co">#&gt; Warning: Transformation introduced infinite values in continuous y-axis</span></pre></div>
 <p><img src="reference/figures/README-nytplot-1.png" title="plot of chunk nytplot" alt="plot of chunk nytplot" width="100%"></p>
+</div>
+<div id="us-cdc-surveillance-network-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#us-cdc-surveillance-network-data" class="anchor"></a>US CDC Surveillance Network Data</h3>
+<p>This US Centers for Disase Control surveillance network conducts population-based surveillance for laboratory-confirmed COVID-19-associated hospitalizations in children (persons younger than 18 years) and adults in the United States. The current network covers nearly 100 counties in the 10 Emerging Infections Program (EIP) states (CA, CO, CT, GA, MD, MN, NM, NY, OR, and TN) and four additional states through the Influenza Hospitalization Surveillance Project (IA, MI, OH, and UT). The network represents approximately 10% of US population (~32 million people). Cases are identified by reviewing hospital, laboratory, and admission databases and infection control logs for patients hospitalized with a documented positive SARS-CoV-2 test. Data gathered are used to estimate age-specific hospitalization rates on a weekly basis and describe characteristics of persons hospitalized with COVID-19. Laboratory confirmation is dependent on clinician-ordered SARS-CoV-2 testing. Therefore, the unadjusted rates provided are likely to be underestimated as COVID-19-associated hospitalizations can be missed due to test availability and provider or facility testing practices. COVID-NET hospitalization data are preliminary and subject to change as more data become available. All incidence rates are unadjusted. Please use the following citation when referencing these data: “COVID-NET: COVID-19-Associated Hospitalization Surveillance Network, Centers for Disease Control and Prevention. WEBSITE. Accessed on DATE”.</p>
+<p>Thanks to Bob Rudis’s <a href="https://github.com/hrbrmstr/cdccovidview"><code>cdccovidview</code></a> package for making these data tractable to include.</p>
+<div class="sourceCode" id="cb13"><pre class="r"><span class="no">cdc_hospitalizations</span>
+<span class="co">#&gt; # A tibble: 4,590 x 8</span>
+<span class="co">#&gt;    catchment      network   year  mmwr_year mmwr_week age_category cumulative_rate weekly_rate</span>
+<span class="co">#&gt;    &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;                  &lt;dbl&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 Entire Network COVID-NET 2020  2020      10        0-4 yr                   0           0  </span>
+<span class="co">#&gt;  2 Entire Network COVID-NET 2020  2020      11        0-4 yr                   0           0  </span>
+<span class="co">#&gt;  3 Entire Network COVID-NET 2020  2020      12        0-4 yr                   0           0  </span>
+<span class="co">#&gt;  4 Entire Network COVID-NET 2020  2020      13        0-4 yr                   0.4         0.4</span>
+<span class="co">#&gt;  5 Entire Network COVID-NET 2020  2020      14        0-4 yr                   0.8         0.4</span>
+<span class="co">#&gt;  6 Entire Network COVID-NET 2020  2020      15        0-4 yr                   1.1         0.3</span>
+<span class="co">#&gt;  7 Entire Network COVID-NET 2020  2020      16        0-4 yr                  NA          NA  </span>
+<span class="co">#&gt;  8 Entire Network COVID-NET 2020  2020      17        0-4 yr                  NA          NA  </span>
+<span class="co">#&gt;  9 Entire Network COVID-NET 2020  2020      18        0-4 yr                  NA          NA  </span>
+<span class="co">#&gt; 10 Entire Network COVID-NET 2020  2020      19        0-4 yr                  NA          NA  </span>
+<span class="co">#&gt; # … with 4,580 more rows</span>
+
+<span class="no">cdc_catchments</span>
+<span class="co">#&gt; # A tibble: 17 x 2</span>
+<span class="co">#&gt;    name      area          </span>
+<span class="co">#&gt;  * &lt;chr&gt;     &lt;chr&gt;         </span>
+<span class="co">#&gt;  1 COVID-NET Entire Network</span>
+<span class="co">#&gt;  2 EIP       California    </span>
+<span class="co">#&gt;  3 EIP       Colorado      </span>
+<span class="co">#&gt;  4 EIP       Connecticut   </span>
+<span class="co">#&gt;  5 EIP       Entire Network</span>
+<span class="co">#&gt;  6 EIP       Georgia       </span>
+<span class="co">#&gt;  7 EIP       Maryland      </span>
+<span class="co">#&gt;  8 EIP       Minnesota     </span>
+<span class="co">#&gt;  9 EIP       New Mexico    </span>
+<span class="co">#&gt; 10 EIP       New York      </span>
+<span class="co">#&gt; 11 EIP       Oregon        </span>
+<span class="co">#&gt; 12 EIP       Tennessee     </span>
+<span class="co">#&gt; 13 IHSP      Entire Network</span>
+<span class="co">#&gt; 14 IHSP      Iowa          </span>
+<span class="co">#&gt; 15 IHSP      Michigan      </span>
+<span class="co">#&gt; 16 IHSP      Ohio          </span>
+<span class="co">#&gt; 17 IHSP      Utah</span>
+
+<span class="no">cdc_deaths_by_state</span>
+<span class="co">#&gt; # A tibble: 53 x 7</span>
+<span class="co">#&gt;    state                covid_deaths total_deaths percent_expected_deaths pneumonia_deaths pneumonia_and_covid_deaths all_influenza_deaths_j09_j11</span>
+<span class="co">#&gt;    &lt;chr&gt;                       &lt;int&gt;        &lt;int&gt;                   &lt;dbl&gt;            &lt;int&gt;                      &lt;int&gt;                        &lt;int&gt;</span>
+<span class="co">#&gt;  1 Alabama                        47        10346                    0.89              610                         15                           79</span>
+<span class="co">#&gt;  2 Alaska                          3          747                    0.81               36                          2                            3</span>
+<span class="co">#&gt;  3 Arizona                        62        13201                    0.98              870                         37                           99</span>
+<span class="co">#&gt;  4 Arkansas                       12         6616                    0.93              436                          2                           64</span>
+<span class="co">#&gt;  5 California                    452        58637                    0.96             4788                        246                          527</span>
+<span class="co">#&gt;  6 Colorado                      211         8873                    1.01              670                        131                           85</span>
+<span class="co">#&gt;  7 Connecticut                     0            0                    0                   0                          0                            0</span>
+<span class="co">#&gt;  8 Delaware                        8         1517                    0.74               74                          4                           10</span>
+<span class="co">#&gt;  9 District of Columbia           21         1196                    0.9               118                         21                            6</span>
+<span class="co">#&gt; 10 Florida                       405        46261                    0.99             3232                        239                          266</span>
+<span class="co">#&gt; # … with 43 more rows</span>
+
+<span class="no">nssp_covid_er_reg</span>
+<span class="co">#&gt; # A tibble: 538 x 9</span>
+<span class="co">#&gt;     week num_fac total_ed_visits visits pct_visits visit_type region   source                 year</span>
+<span class="co">#&gt;    &lt;int&gt;   &lt;int&gt; &lt;chr&gt;            &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;                 &lt;int&gt;</span>
+<span class="co">#&gt;  1    41     202 130377             814    0.006   ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  2    42     202 132385             912    0.00700 ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  3    43     202 131866             883    0.00700 ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  4    44     203 128256             888    0.00700 ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  5    45     203 127466             979    0.008   ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  6    46     202 125306            1188    0.009   ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  7    47     202 128877            1235    0.01    ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  8    48     202 124781            1451    0.012   ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt;  9    49     202 125939            1362    0.011   ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt; 10    50     202 130430            1405    0.011   ili        Region 1 Emergency Departments  2019</span>
+<span class="co">#&gt; # … with 528 more rows</span></pre></div>
+<div class="sourceCode" id="cb14"><pre class="r">
+<span class="no">age_f</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(
+  <span class="st">"0-4 yr"</span>, <span class="st">"5-17 yr"</span>, <span class="st">"18-49 yr"</span>,
+  <span class="st">"50-64 yr"</span>, <span class="st">"65+ yr"</span>, <span class="st">"65-74 yr"</span>,
+  <span class="st">"75-84 yr"</span>, <span class="st">"85+"</span>)
+
+<span class="no">cdc_hospitalizations</span> <span class="kw">%&gt;%</span>
+  <span class="fu">mutate</span>(<span class="kw">start</span> <span class="kw">=</span> <span class="kw pkg">cdccovidview</span><span class="kw ns">::</span><span class="fu">mmwr_week_to_date</span>(<span class="no">mmwr_year</span>, <span class="no">mmwr_week</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">weekly_rate</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">catchment</span> <span class="kw">==</span> <span class="st">"Entire Network"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">start</span>, <span class="no">network</span>, <span class="no">age_category</span>, <span class="no">weekly_rate</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">age_category</span> <span class="kw">!=</span> <span class="st">"Overall"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">mutate</span>(<span class="kw">age_category</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">age_category</span>, <span class="kw">levels</span> <span class="kw">=</span> <span class="no">age_f</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">ggplot</span>() +
+  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="no">start</span>, <span class="no">weekly_rate</span>)) +
+  <span class="fu">scale_x_date</span>(
+    <span class="kw">date_breaks</span> <span class="kw">=</span> <span class="st">"2 weeks"</span>, <span class="kw">date_labels</span> <span class="kw">=</span> <span class="st">"%b\n%d"</span>
+  ) +
+  <span class="fu">facet_grid</span>(<span class="no">network</span> ~ <span class="no">age_category</span>) +
+  <span class="fu">labs</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">"Rates per 100,000 pop"</span>,
+    <span class="kw">title</span> <span class="kw">=</span> <span class="st">"COVID-NET Weekly Rates by Network and Age Group"</span>,
+    <span class="kw">subtitle</span> <span class="kw">=</span> <span class="st">"Courtesy Bob Rudis's cdccovidview"</span>,
+    <span class="kw">caption</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"Source: COVID-NET: COVID-19-Associated Hospitalization Surveillance Network, Centers for Disease Control and Prevention.\n&lt;https://gis.cdc.gov/grasp/COVIDNet/COVID19_3.html&gt;; Accessed on %s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>())) +
+  <span class="fu">theme_minimal</span>()</pre></div>
+<p><img src="reference/figures/README-cdc-example-1.png" title="plot of chunk cdc-example" alt="plot of chunk cdc-example" width="100%"></p>
+</div>
+<div id="citing-the-package" class="section level3">
+<h3 class="hasAnchor">
+<a href="#citing-the-package" class="anchor"></a>Citing the package</h3>
+<div class="sourceCode" id="cb15"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span>(<span class="st">"covdata"</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; To cite the package `covdata` in publications use:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   Kieran Healy. 2020. covdata: COVID-19 Case and Mortality Time Series. R package version 0.1.0,</span>
+<span class="co">#&gt;   &lt;http://kjhealy.github.io/covdata&gt;.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   @Manual{,</span>
+<span class="co">#&gt;     title = {covdata: COVID-19 Case and Mortality Time Series},</span>
+<span class="co">#&gt;     author = {Kieran Healy},</span>
+<span class="co">#&gt;     year = {2020},</span>
+<span class="co">#&gt;     note = {R package version 0.1.0},</span>
+<span class="co">#&gt;     url = {http://kjhealy.github.io/covdata},</span>
+<span class="co">#&gt;   }</span></pre></div>
 <p>Mask icon in hex logo by <a href="https://www.flaticon.com/authors/freepik">Freepik</a>.</p>
 </div>
 </div>
@@ -310,25 +444,40 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/kjhealy/covdata/">https://​github.com/​kjhealy/​covdata/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/kjhealy/covdata/issues">https://​github.com/​kjhealy/​covdata/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing covdata</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="http://kieranhealy.org">Kieran Healy</a> <br><small class="roles"> Maintainer </small>  </li>
+<a href="http://kieranhealy.org">Kieran Healy</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/https://orcid.org/0000-0001-9114-981X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.com/kjhealy/covdata"><img src="https://travis-ci.com/kjhealy/covdata.svg?branch=master" alt="Travis build status"></a></li>
+<li><a href="https://github.com/kjhealy/covdata/actions"><img src="https://github.com/kjhealy/covdata/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
 </div>
@@ -340,7 +489,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
