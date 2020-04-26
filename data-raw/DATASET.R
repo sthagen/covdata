@@ -8,8 +8,13 @@ library(socviz)
 library(ggrepel)
 library(paletteer)
 
-### Data-getting functions
+## Check for data/ dir in data-raw
+ifelse(!dir.exists(here("data-raw/data")),
+       dir.create(file.path("data-raw/data")),
+       FALSE)
 
+
+### Data-getting functions
 ## Download today's CSV file, saving it to data/ and also read it in
 get_ecdc_csv <- function(url = "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv",
                          date = lubridate::today(),
@@ -39,7 +44,6 @@ get_ecdc_csv <- function(url = "https://opendata.ecdc.europa.eu/covid19/casedist
 
 ## Get Daily COVID Tracking Project Data
 ## form is https://covidtracking.com/api/us/daily.csv
-
 get_uscovid_data <- function(url = "https://covidtracking.com/api/",
                              unit = c("states", "us"),
                              fname = "-",
@@ -55,6 +59,151 @@ get_uscovid_data <- function(url = "https://covidtracking.com/api/",
                           paste0(unit, "_daily_", date), ext = ext)
 
   tf <- tempfile(fileext = ext)
+  curl::curl_download(target, tf)
+
+  switch(save_file,
+         y = fs::file_copy(tf, destination),
+         n = NULL)
+
+  janitor::clean_names(read_csv(tf))
+}
+
+
+
+get_google_data <- function(url = "https://www.gstatic.com/covid19/mobility/",
+                             fname = "Global_Mobility_Report",
+                             date = lubridate::today(),
+                             ext = "csv",
+                             dest = "data-raw/data",
+                             save_file = c("n", "y")) {
+
+  save_file <- match.arg(save_file)
+
+  target <-  paste0(url, fname, ".", ext)
+  message("target: ", target)
+
+  destination <- fs::path(here::here("data-raw/data"),
+                          paste0(fname, "_", date), ext = ext)
+
+  tf <- tempfile(fileext = ext)
+  curl::curl_download(target, tf)
+
+  switch(save_file,
+         y = fs::file_copy(tf, destination),
+         n = NULL)
+
+  ## Need a colspec for the Google data because it's so large
+  ## read_csv's guesses fail for some columns.
+  gm_spec <- cols(country_region_code = col_character(),
+                  country_region = col_character(),
+                  sub_region_1 = col_character(),
+                  sub_region_2 = col_character(),
+                  date = col_date(),
+                  retail_and_recreation_percent_change_from_baseline = col_integer(),
+                  grocery_and_pharmacy_percent_change_from_baseline = col_integer(),
+                  parks_percent_change_from_baseline = col_integer(),
+                  transit_stations_percent_change_from_baseline = col_integer(),
+                  workplaces_percent_change_from_baseline = col_integer(),
+                  residential_percent_change_from_baseline = col_integer())
+
+
+  janitor::clean_names(read_csv(tf, col_types = gm_spec))
+}
+
+
+## Get NYT data from their repo
+get_nyt_county <- function(url = "https://github.com/nytimes/covid-19-data/raw/master/",
+                           fname = "us-counties",
+                           date = lubridate::today(),
+                           ext = "csv",
+                           dest = "data-raw/data",
+                           save_file = c("n", "y")) {
+
+  save_file <- match.arg(save_file)
+  target <-  paste0(url, fname, ".", ext)
+  message("target: ", target)
+
+  destination <- fs::path(here::here("data-raw/data"),
+                          paste0(fname, "_", date), ext = ext)
+
+  tf <- tempfile(fileext = ext)
+  curl::curl_download(target, tf)
+
+  switch(save_file,
+         y = fs::file_copy(tf, destination),
+         n = NULL)
+
+  janitor::clean_names(read_csv(tf))
+  }
+
+
+get_nyt_states <- function(url = "https://github.com/nytimes/covid-19-data/raw/master/",
+                           fname = "us-states",
+                           date = lubridate::today(),
+                           ext = "csv",
+                           dest = "data-raw/data",
+                           save_file = c("n", "y")) {
+
+  save_file <- match.arg(save_file)
+  target <-  paste0(url, fname, ".", ext)
+  message("target: ", target)
+
+  destination <- fs::path(here::here("data-raw/data"),
+                          paste0(fname, "_", date), ext = ext)
+
+  tf <- tempfile(fileext = ext)
+  curl::curl_download(target, tf)
+
+  switch(save_file,
+         y = fs::file_copy(tf, destination),
+         n = NULL)
+
+  janitor::clean_names(read_csv(tf))
+}
+
+
+get_nyt_us <- function(url = "https://github.com/nytimes/covid-19-data/raw/master/",
+                           fname = "us",
+                           date = lubridate::today(),
+                           ext = "csv",
+                           dest = "data-raw/data",
+                           save_file = c("n", "y")) {
+
+  save_file <- match.arg(save_file)
+  target <-  paste0(url, fname, ".", ext)
+  message("target: ", target)
+
+  destination <- fs::path(here::here("data-raw/data"),
+                          paste0(fname, "_", date), ext = ext)
+
+  tf <- tempfile(fileext = ext)
+  curl::curl_download(target, tf)
+
+  switch(save_file,
+         y = fs::file_copy(tf, destination),
+         n = NULL)
+
+  janitor::clean_names(read_csv(tf))
+}
+
+
+## Get Apple data
+get_apple_data <- function(url = "https://covid19-static.cdn-apple.com/covid19-mobility-data/2006HotfixDev13/v1/en-us",
+                             fname = "applemobilitytrends-",
+                             date = lubridate::today(),
+                             ext = "csv",
+                             dest = "data-raw/data",
+                             save_file = c("n", "y")) {
+
+  save_file <- match.arg(save_file)
+  target <-  paste0(url, "/", fname, date, ".", ext)
+  message("target: ", target)
+
+  destination <- fs::path(here::here("data-raw/data"),
+                          paste0("apple_mobility", "_daily_", date), ext = ext)
+
+  tf <- tempfile(fileext = ext)
+
   curl::curl_download(target, tf)
 
   switch(save_file,
@@ -194,6 +343,11 @@ covnat <- covid %>%
 
 covnat ## Data object
 
+
+countries <- covnat %>%
+  distinct(cname, iso3) %>%
+  left_join(cname_table)
+
 ### Get US Data from the COVID Tracking Project
 ## US state data
 cov_us_raw <- get_uscovid_data(save_file = "n")
@@ -211,13 +365,13 @@ covus
 ### Get US county data from the NYT
 
 ## NYT county data
-nytcovcounty <- read_csv("data-raw/data/nyt-us-counties.csv")
+nytcovcounty <- get_nyt_county()
 
 ### NYT state data
-nytcovstate <- read_csv("data-raw/data/nyt-us-states.csv")
+nytcovstate <- get_nyt_states()
 
 ### NYt national (US only) data
-nytcovus <- read_csv("data-raw/data/nyt-us.csv")
+nytcovus <- get_nyt_us()
 
 
 ## Get CDC Surveillance Data
@@ -235,23 +389,50 @@ cdc_catchments <- cdccovidview::surveillance_areas()
 nssp_covid_er_nat <- cdccovidview::nssp_er_visits_national()
 nssp_covid_er_reg <- cdccovidview::nssp_er_visits_regional()
 
+## Apple Mobility Data
+apple_mobility <- get_apple_data(date = "2020-04-22") %>%
+  pivot_longer(x2020_01_13:x2020_04_22, names_to = "date", values_to = "index") %>%
+  mutate(
+    date = stringr::str_remove(date, "x"),
+    date = stringr::str_replace_all(date, "_", "-"),
+    date = as_date(date))
+
+## Google Mobility Data
+
+google_mobility <- get_google_data() %>%
+  rename(retail = retail_and_recreation_percent_change_from_baseline,
+         grocery = grocery_and_pharmacy_percent_change_from_baseline,
+         parks = parks_percent_change_from_baseline,
+         transit = transit_stations_percent_change_from_baseline,
+         workplaces = workplaces_percent_change_from_baseline,
+         residential = residential_percent_change_from_baseline) %>%
+  pivot_longer(retail:residential, names_to = "type", values_to = "pct_diff")
+
 ## write data
-usethis::use_data(covnat, overwrite = TRUE)
-usethis::use_data(covus, overwrite = TRUE)
 
-usethis::use_data(nytcovcounty, overwrite = TRUE)
-usethis::use_data(nytcovstate, overwrite = TRUE)
-usethis::use_data(nytcovus, overwrite = TRUE)
+## COVID Tracking Project
+usethis::use_data(covnat, overwrite = TRUE, compress = "xz")
+usethis::use_data(covus, overwrite = TRUE, compress = "xz")
 
+## NYT
+usethis::use_data(nytcovcounty, overwrite = TRUE, compress = "xz")
+usethis::use_data(nytcovstate, overwrite = TRUE, compress = "xz")
+usethis::use_data(nytcovus, overwrite = TRUE, compress = "xz")
 
-usethis::use_data(cdc_hospitalizations, overwrite = TRUE)
-usethis::use_data(cdc_deaths_by_week, overwrite = TRUE)
-usethis::use_data(cdc_deaths_by_age, overwrite = TRUE)
-usethis::use_data(cdc_deaths_by_sex, overwrite = TRUE)
-usethis::use_data(cdc_deaths_by_state, overwrite = TRUE)
-usethis::use_data(cdc_catchments, overwrite = TRUE)
-usethis::use_data(nssp_covid_er_nat, overwrite = TRUE)
-usethis::use_data(nssp_covid_er_reg, overwrite = TRUE)
+## Country codes
+usethis::use_data(countries, overwrite = TRUE, compress = "xz")
 
+## CDC surveillance
+usethis::use_data(cdc_hospitalizations, overwrite = TRUE, compress = "xz")
+usethis::use_data(cdc_deaths_by_week, overwrite = TRUE, compress = "xz")
+usethis::use_data(cdc_deaths_by_age, overwrite = TRUE, compress = "xz")
+usethis::use_data(cdc_deaths_by_sex, overwrite = TRUE, compress = "xz")
+usethis::use_data(cdc_deaths_by_state, overwrite = TRUE, compress = "xz")
+usethis::use_data(cdc_catchments, overwrite = TRUE, compress = "xz")
+usethis::use_data(nssp_covid_er_nat, overwrite = TRUE, compress = "xz")
+usethis::use_data(nssp_covid_er_reg, overwrite = TRUE, compress = "xz")
 
+## Apple and Google
+usethis::use_data(apple_mobility, overwrite = TRUE, compress = "xz")
+usethis::use_data(google_mobility, overwrite = TRUE, compress = "xz")
 

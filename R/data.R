@@ -1,8 +1,57 @@
+#' @title fmt_nc
+#' @description Format fmt_nc in df
+#' @param x df
+#' @return formatted string
+#' @details use in fn documentation
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname fmt_nc
+#' @author Kieran Healy
+fmt_nc <- function(x){
+  prettyNum(ncol(x), big.mark=",", scientific=FALSE)
+}
+
+
+#' @title fmt_nr
+#' @description Format fmt_nr in df
+#' @param x df
+#' @return formatted string
+#' @details use in fn documentation
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @author Kieran Healy
+fmt_nr <- function(x){
+  prettyNum(nrow(x), big.mark=",", scientific=FALSE)
+}
+
+
+#' @title Country Names and ISO codes
+#' @description Convenience table of country names and their abbreviated names
+#' @format A data frame with `r fmt_nr(countries)` rows and `r fmt_nc(countries)` variables:
+#' \describe{
+#'   \item{\code{cname}}{character Country name}
+#'   \item{\code{iso3}}{character ISO 3 designation}
+#'   \item{\code{iso2}}{character ISO 2 designation}
+#'}
+#' @details Produced from the ECDC tables in the covdata package
+#' @author Kieran Healy
+#' @source
+#' @references
+"countries"
+
 #' International COVID-19 cases and deaths, current as of `r format(Sys.Date(), "%A, %B %e, %Y")`
 #'
 #' A dataset containing national-level ECDC data on COVID-19
 #'
-#' @format A tibble with `r nrow(covnat)` rows and `r ncol(covnat)` columns
+#' @format A tibble with `r fmt_nr(covnat)` rows and `r fmt_nc(covnat)` columns
 #' \describe{
 #'   \item{date}{date in YYYY-MM-DD format}
 #'   \item{cname}{Name of country (character)}
@@ -20,7 +69,7 @@
 #'
 #' A dataset containing US state-level data on COVID-19
 #'
-#' @format A tibble with `r nrow(covus)` rows and `r ncol(covus)` columns
+#' @format A tibble with `r fmt_nr(covus)` rows and `r fmt_nc(covus)` columns
 #' \describe{
 #' \item{date}{Date in YYYY-MM-DD format (date)}
 #' \item{state}{Two letter State abbreviation (character)}
@@ -53,7 +102,7 @@
 #'
 #' A dataset containing US county-level data on COVID-19, collected by the New York Times.
 #'
-#' @format A tibble with `r nrow(nytcovcounty)` rows and `r ncol(nytcovcounty)` columns
+#' @format A tibble with `r fmt_nr(nytcovcounty)` rows and `r fmt_nc(nytcovcounty)` columns
 #' \describe{
 #' \item{date}{Date in YYYY-MM-DD format (date)}
 #' \item{county}{County name (character)}
@@ -77,7 +126,7 @@
 #'
 #' A dataset containing US state-level data on COVID-19, collected by the New York Times.
 #'
-#' @format A tibble with `r nrow(nytcovstate)` rows and `r ncol(nytcovstate)` columns
+#' @format A tibble with `r fmt_nr(nytcovstate)` rows and `r fmt_nc(nytcovstate)` columns
 #' \describe{
 #' \item{date}{Date in YYYY-MM-DD format (date)}
 #' \item{state}{State name (character)}
@@ -94,7 +143,7 @@
 #'
 #' A dataset containing US national-level data on COVID-19, collected by the New York Times.
 #'
-#' @format A tibble with `r nrow(nytcovus)` rows and `r ncol(nytcovus)` columns
+#' @format A tibble with `r fmt_nr(nytcovus)` rows and `r fmt_nc(nytcovus)` columns
 #' \describe{
 #' \item{date}{Date in YYYY-MM-DD format (date)}
 #' \item{cases}{Cumulative N  reported cases}
@@ -108,7 +157,7 @@
 
 #' @title CDC Laboratory Confirmed COVID-19-Associated Hospitalization in the US
 #' @description Courtesy of Bob Rudis's cdccovidview package
-#' @format A data frame with 4590 rows and 8 variables:
+#' @format A data frame with `r fmt_nr(cdc_hospitalizations)` rows and `r col(cdc_hospitalizations)` variables:
 #' \describe{
 #'   \item{\code{catchment}}{character COLUMN_DESCRIPTION}
 #'   \item{\code{network}}{character COLUMN_DESCRIPTION}
@@ -134,7 +183,7 @@
 
 #' @title CDC Provisional death counts by week
 #' @description Provisional Death Counts for Coronavirus Disease (COVID-19)
-#' @format A data frame with 10 rows and 7 variables:
+#' @format A data frame with `r fmt_nr(cdc_deaths_by_week)` rows and `r fmt_nc(cdc_deaths_by_week)` variables:
 #' \describe{
 #'   \item{\code{week}}{double COLUMN_DESCRIPTION}
 #'   \item{\code{covid_deaths}}{integer COLUMN_DESCRIPTION}
@@ -158,7 +207,7 @@
 
 #' @title CDC Surveillance Network Death Counts by Age
 #' @description Provisional Death Counts for Coronavirus Disease (COVID-19)
-#' @format A data frame with 12 rows and 7 variables:
+#' @format A data frame with `r fmt_nr(cdc_deaths_by_age)` rows and `r fmt_nc(cdc_deaths_by_age)` variables:
 #' \describe{
 #'   \item{\code{age_group}}{character COLUMN_DESCRIPTION}
 #'   \item{\code{covid_deaths}}{integer COLUMN_DESCRIPTION}
@@ -182,7 +231,7 @@
 
 #' @title CDC provisional death counts by sex
 #' @description Provisional Death Counts for Coronavirus Disease (COVID-19)
-#' @format A data frame with 3 rows and 7 variables:
+#' @format A data frame with `r fmt_nr(cdc_deaths_by_sex)` rows and `r fmt_nc(cdc_deaths_by_sex)` variables:
 #' \describe{
 #'   \item{\code{sex}}{character COLUMN_DESCRIPTION}
 #'   \item{\code{covid_deaths}}{integer COLUMN_DESCRIPTION}
@@ -206,7 +255,7 @@
 
 #' @title CDC provisional death counts by state
 #' @description CDC Surveillance Network provisional death counts
-#' @format A data frame with 53 rows and 7 variables:
+#' @format A data frame with `r fmt_nr(cdc_deaths_by_state)` rows and `r fmt_nc(cdc_deaths_by_state)` variables:
 #' \describe{
 #'   \item{\code{state}}{character COLUMN_DESCRIPTION}
 #'   \item{\code{covid_deaths}}{integer COLUMN_DESCRIPTION}
@@ -229,7 +278,11 @@
 
 #' @title CDC surveillance network and network catchment area
 #' @description What the CDC surveillance network covers
-#' @format A data frame with 17 rows and 2 variables: \describe{ \item{\code{name}}{character COLUMN_DESCRIPTION} \item{\code{area}}{character COLUMN_DESCRIPTION} }
+#' @format A data frame with `r fmt_nr(cdc_catchments)` rows and `r fmt_nc(cdc_catchments)` variables:
+#' \describe{
+#' \item{\code{name}}{character COLUMN_DESCRIPTION}
+#' \item{\code{area}}{character COLUMN_DESCRIPTION}
+#' }
 #' @details The Coronavirus Disease 2019 (COVID-19)-Associated Hospitalization Surveillance Network (COVID-NET) conducts population-based surveillance for laboratory-confirmed COVID-19-associated hospitalizations in children (persons younger than 18 years) and adults. The current network covers nearly 100 counties in the 10 Emerging Infections Program (EIP) states (CA, CO, CT, GA, MD, MN, NM, NY, OR, and TN) and four additional states through the Influenza Hospitalization Surveillance Project (IA, MI, OH, and UT). The network represents approximately 10% of US population (~32 million people). Cases are identified by reviewing hospital, laboratory, and admission databases and infection control logs for patients hospitalized with a documented positive SARS-CoV-2 test. Data gathered are used to estimate age-specific hospitalization rates on a weekly basis and describe characteristics of persons hospitalized with COVID-19. Laboratory confirmation is dependent on clinician-ordered SARS-CoV-2 testing. Therefore, the unadjusted rates provided are likely to be underestimated as COVID-19-associated hospitalizations can be missed due to test availability and provider or facility testing practices. COVID-NET hospitalization data are preliminary and subject to change as more data become available. All incidence rates are unadjusted. Please use the following citation when referencing these data: “COVID-NET: COVID-19-Associated Hospitalization Surveillance Network, Centers for Disease Control and Prevention. WEBSITE. Accessed on DATE”.
 #' @source Courtesy of Bob Rudis's cdccovidview package
 #' @references <https://www.cdc.gov/coronavirus/2019-ncov/covid-data/covidview/index.html>
@@ -239,7 +292,7 @@
 #' @title NSSP National COVID-related ER Visits
 #' @description National Syndromic Surveillance Program (NSSP):
 #' Emergency Department Visits and Percentage of Visits for COVID-19-Like Illness (CLI) or Influenza-like Illness (ILI)
-#' @format A data frame with 54 rows and 9 variables:
+#' @format A data frame with `r fmt_nr(nssp_covid_er_nat)` rows and `r fmt_nc(nssp_covid_er_nat)` variables:
 #' \describe{
 #'   \item{\code{week}}{integer COLUMN_DESCRIPTION}
 #'   \item{\code{num_fac}}{integer COLUMN_DESCRIPTION}
@@ -266,7 +319,7 @@
 #' @title NSSP Regional COVID ER Visits
 #' @description Regional Syndromic Surveillance Program (NSSP):
 #' Emergency Department Visits and Percentage of Visits for COVID-19-Like Illness (CLI) or Influenza-like Illness (ILI)
-#' @format A data frame with 538 rows and 9 variables:
+#' @format A data frame with `r fmt_nr(nssp_covid_er_reg)` rows and `r fmt_nc(nssp_covid_er_reg)` variables:
 #' \describe{
 #'   \item{\code{week}}{integer COLUMN_DESCRIPTION}
 #'   \item{\code{num_fac}}{integer COLUMN_DESCRIPTION}
@@ -290,4 +343,39 @@
 #' @author Kieran Healy
 "nssp_covid_er_reg"
 
+## Apple Mobility Data
+#' @title Apple Mobility Data
+#' @description Data from Apple Maps on relative changes in mobility from January to April 2020
+#' @format A data frame with `r fmt_nr(apple_mobility)` rows and `r fmt_nc(apple_mobility)` variables:
+#' \describe{
+#'   \item{\code{geo_type}}{character Type geographical unit. Values: city or country/region}
+#'   \item{\code{region}}{character Name of geographical unit.}
+#'   \item{\code{transportation_type}}{character Mode of transport. Values: Driving, Transit, or Walking}
+#'   \item{\code{date}}{double Date in yyyy-mm-dddd format}
+#'   \item{\code{index}}{double Activity index. Indexed to 100 on the first date of observation for a given mode of transport.}
+#'}
+#' @details Data made available by Apple, Inc. at \url{https://www.apple.com/covid19/mobility}, showing relative volume of directions requests per country/region or city compared to a baseline volume on January 13th, 2020. Apple defines the day as midnight-to-midnight, Pacific time. Cities represent usage in greater metropolitan areas and are stably defined during this period. In many countries/regions and cities, relative volume has increased since January 13th, consistent with normal, seasonal usage of Apple Maps. Day of week effects are important to normalize as you use this data. Data that is sent from users’ devices to the Apple Maps service is associated with random, rotating identifiers so Apple does not have a profile of individual movements and searches. Apple Maps has no demographic information about its users, and so cannot make any statements about the representativeness of its usage against the overall population.
+#' @author Kieran Healy
+#' @source https://www.apple.com/covid19/mobility
+#' @references See https://www.apple.com/covid19/mobility for detailed terms of use.
+"apple_mobility"
 
+
+## Google Mobility Data
+#' @title Google Mobility Data
+#' @description Data from Google's Community Mobility Reports on relative changes in movement trends by location type
+#' @format A data frame with `r fmt_nr(google_mobility)` rows and `r fmt_nc(google_mobility)` variables:
+#' \describe{
+#'   \item{\code{country_region_code}}{character Country Code}
+#'   \item{\code{country_region}}{character Country or Region name}
+#'   \item{\code{sub_region_1}}{character Subregion (e.g. US state) name}
+#'   \item{\code{sub_region_2}}{character Subregion (e.g. US county) name}
+#'   \item{\code{date}}{double Date in yyyy-mm-dd format}
+#'   \item{\code{type}}{character Type of location. Values are retail, grocery (and pharmacy), parts, transit (hubs/stations), workplaces, and residential}
+#'   \item{\code{pct_diff}}{integer Percent change from baseline activity}
+#'}
+#' @details Location accuracy and the understanding of categorized places varies from region to region, so Google does not recommend using this data to compare changes between countries, or between regions with different characteristics (e.g. rural versus urban areas). Regions or categories are omitted if Google does not have have sufficient statistically significant levels of data for it. Changes for each day are compared to a baseline value for that day of the week. The baseline is the median value, for the corresponding day of the week, during the 5-week period Jan 3–Feb 6, 2020. What data is included in the calculation depends on user settings, connectivity, and whether it meets our privacy threshold. If the privacy threshold isn’t met (when somewhere isn’t busy enough to ensure anonymity) we don’t show a change for the day. As a result, you may encounter empty fields for certain places and dates. We calculate these insights based on data from users who have opted-in to Location History for their Google Account, so the data represents a sample of our users. As with all samples, this may or may not represent the exact behavior of a wider population.
+#' @author Kieran Healy
+#' @source Google LLC "Google COVID-19 Community Mobility Reports." https://www.google.com/covid19/mobility/ Accessed: `r Sys.Date()`
+#' @references
+"google_mobility"
