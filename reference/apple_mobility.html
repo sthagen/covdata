@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CDC Surveillance Network Death Counts by Age — cdc_deaths_by_age • covdata</title>
+<title>Apple Mobility Data — apple_mobility • covdata</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="CDC Surveillance Network Death Counts by Age — cdc_deaths_by_age" />
-<meta property="og:description" content="Provisional Death Counts for Coronavirus Disease (COVID-19)" />
+<meta property="og:title" content="Apple Mobility Data — apple_mobility" />
+<meta property="og:description" content="Data from Apple Maps on relative changes in mobility from January to April 2020" />
 
 
 
@@ -108,46 +108,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>CDC Surveillance Network Death Counts by Age</h1>
+    <h1>Apple Mobility Data</h1>
     <small class="dont-index">Source: <a href='https://github.com/kjhealy/covdata/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>cdc_deaths_by_age.Rd</code></div>
+    <div class="hidden name"><code>apple_mobility.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Provisional Death Counts for Coronavirus Disease (COVID-19)</p>
+    <p>Data from Apple Maps on relative changes in mobility from January to April 2020</p>
     </div>
 
-    <pre class="usage"><span class='no'>cdc_deaths_by_age</span></pre>
+    <pre class="usage"><span class='no'>apple_mobility</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 12 rows and 13 variables:</p><dl>
-<dt><code>age_group</code></dt><dd><p>character COLUMN_DESCRIPTION</p></dd>
-<dt><code>covid_deaths</code></dt><dd><p>integer COLUMN_DESCRIPTION</p></dd>
-<dt><code>total_deaths</code></dt><dd><p>integer COLUMN_DESCRIPTION</p></dd>
-<dt><code>percent_expected_deaths</code></dt><dd><p>double COLUMN_DESCRIPTION</p></dd>
-<dt><code>pneumonia_deaths</code></dt><dd><p>integer COLUMN_DESCRIPTION</p></dd>
-<dt><code>pneumonia_and_covid_deaths</code></dt><dd><p>integer COLUMN_DESCRIPTION</p></dd>
-<dt><code>all_influenza_deaths_j09_j11</code></dt><dd><p>integer COLUMN_DESCRIPTION</p></dd>
+    <p>A data frame with 39,895 rows and 5 variables:</p><dl>
+<dt><code>geo_type</code></dt><dd><p>character Type geographical unit. Values: city or country/region</p></dd>
+<dt><code>region</code></dt><dd><p>character Name of geographical unit.</p></dd>
+<dt><code>transportation_type</code></dt><dd><p>character Mode of transport. Values: Driving, Transit, or Walking</p></dd>
+<dt><code>date</code></dt><dd><p>double Date in yyyy-mm-dddd format</p></dd>
+<dt><code>index</code></dt><dd><p>double Activity index. Indexed to 100 on the first date of observation for a given mode of transport.</p></dd>
 
 </dl>
 
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <p>Courtesy of Bob Rudis's cdccovidview package</p>
+    <p>https://www.apple.com/covid19/mobility</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The U.S. Centers for Disease Control provides weekly
-summary and interpretation of key indicators that have been adapted
-to track the COVID-19 pandemic in the United States. Data is
-retrieved using the cdccovidview package from both COVIDView
-(<a href='https://www.cdc.gov/coronavirus/2019-ncov/covid-data/covidview/index.html'>https://www.cdc.gov/coronavirus/2019-ncov/covid-data/covidview/index.html</a>)
-and COVID-NET
-(<a href='https://gis.cdc.gov/grasp/COVIDNet/COVID19_3.html'>https://gis.cdc.gov/grasp/COVIDNet/COVID19_3.html</a>). Please see the indicated reference for all the caveats and precise meanings for each field.</p>
+    <p>Data made available by Apple, Inc. at <a href='https://www.apple.com/covid19/mobility'>https://www.apple.com/covid19/mobility</a>, showing relative volume of directions requests per country/region or city compared to a baseline volume on January 13th, 2020. Apple defines the day as midnight-to-midnight, Pacific time. Cities represent usage in greater metropolitan areas and are stably defined during this period. In many countries/regions and cities, relative volume has increased since January 13th, consistent with normal, seasonal usage of Apple Maps. Day of week effects are important to normalize as you use this data. Data that is sent from users’ devices to the Apple Maps service is associated with random, rotating identifiers so Apple does not have a profile of individual movements and searches. Apple Maps has no demographic information about its users, and so cannot make any statements about the representativeness of its usage against the overall population.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='https://data.cdc.gov/api/views/hc4f-j6nb/rows.csv?accessType=DOWNLOAD&amp;bom=true&amp;format=true'>https://data.cdc.gov/api/views/hc4f-j6nb/rows.csv?accessType=DOWNLOAD&amp;bom=true&amp;format=true</a></p>
+    <p>See https://www.apple.com/covid19/mobility for detailed terms of use.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
