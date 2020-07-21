@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>COVID-19 data for the USA, current as of Saturday, May  9, 2020 — covus • covdata</title>
+<title>COVID-19 data for the USA, current as of Monday, July 20, 2020 — covus • covdata</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="COVID-19 data for the USA, current as of Saturday, May  9, 2020 — covus" />
+<meta property="og:title" content="COVID-19 data for the USA, current as of Monday, July 20, 2020 — covus" />
 <meta property="og:description" content="A dataset containing US state-level data on COVID-19" />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
       </span>
     </div>
 
@@ -98,10 +98,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ecdc-data.html">The ECDC Data</a>
+      <a href="../articles/codebook.html">Summary Codebook</a>
     </li>
     <li>
-      <a href="../articles/us-data.html">Case and Mortality Data for the United States</a>
+      <a href="../articles/ecdc-data.html">European Centers for Disease Control Data</a>
+    </li>
+    <li>
+      <a href="../articles/excess-mortality.html">Excess Mortality Data</a>
+    </li>
+    <li>
+      <a href="../articles/us-data.html">U.S. Case and Mortality Data</a>
     </li>
     <li>
       <a href="../articles/mobility-data.html">Mobility Data from Apple and Google</a>
@@ -113,6 +119,9 @@
       <a href="../articles/coronanet-data.html">CoronaNet Data</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -135,7 +144,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>COVID-19 data for the USA, current as of Saturday, May  9, 2020</h1>
+    <h1>COVID-19 data for the USA, current as of Monday, July 20, 2020</h1>
     <small class="dont-index">Source: <a href='https://github.com/kjhealy/covdata/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>covus.Rd</code></div>
     </div>
@@ -144,17 +153,19 @@
     <p>A dataset containing US state-level data on COVID-19</p>
     </div>
 
-    <pre class="usage"><span class='no'>covus</span></pre>
+    <pre class="usage"><span class='kw'>covus</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A tibble with 65,826 rows and 5 columns</p><dl>
+    <p>A tibble with 129,761 rows and 7 columns</p><dl>
 <dt>date</dt><dd><p>Date in YYYY-MM-DD format (date)</p></dd>
 <dt>state</dt><dd><p>Two letter State abbreviation (character)</p></dd>
 <dt>fips</dt><dd><p>State FIPS code (character)</p></dd>
+<dt><code>data_quality_grade</code></dt><dd><p>character Data quality as assessed by COVID Tracking Project staff</p></dd>
 <dt>measure</dt><dd><p>Outcome measure for this date</p></dd>
 <dt>count</dt><dd><p>Count of measure</p></dd>
+<dt><code>measure_label</code></dt><dd><p>character Outcome measure, suitable for use as a plot label</p></dd>
 
 </dl>
 
@@ -163,26 +174,76 @@
     <p>The COVID-19 Tracking Project <a href='https://covidtracking.com'>https://covidtracking.com</a></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The measures tracked by the COVID tracking project are as follows:</p><ul>
-<li><p><code>positive</code> Total cumulative positive test results.</p></li>
-<li><p><code>positive_increase</code> Increase in positive cases from the day before.</p></li>
-<li><p><code>negative</code> Total cumulative negative test results.</p></li>
-<li><p><code>negative_increase</code> Increase in negative cases from the day before.</p></li>
-<li><p><code>pending</code> Tests that have been submitted to a lab but no results have been reported yet.</p></li>
-<li><p><code>hospitalized_currently</code> Total number of people hospitalized on date.</p></li>
-<li><p><code>hospitalized_cumulative</code> Total cumulative number of people hospitalized by date.</p></li>
-<li><p><code>in_icu_currently</code>  Total number of people in intensive care unit on date.</p></li>
-<li><p><code>in_icu_cumulative</code> Total cumulative number of people in intensive care unit by date.</p></li>
-<li><p><code>on_ventilator_currently</code>  Total number of people on ventilator on date.</p></li>
-<li><p><code>on_ventilator_cumulative</code> Total cumulative number of people on ventilator by date.</p></li>
-<li><p><code>recovered</code> Total number recovered.</p></li>
-<li><p><code>death</code> Total number of deaths.</p></li>
-<li><p><code>death_increase</code> Increase in deaths from the day before.</p></li>
-<li><p><code>total_test_results</code> Calculated value (positive + negative) of total test results.</p></li>
-<li><p><code>total_test_results_increase</code> Increase in total test results from the day before
-Not all measures are reported by all states.</p></li>
-</ul>
+    <p>Table: Data summary</p><table class='table'>
+<tr><td></td><td></td></tr>
+<tr><td>Name</td><td>covus</td></tr>
+<tr><td>Number of rows</td><td>129761</td></tr>
+<tr><td>Number of columns</td><td>7</td></tr>
+<tr><td>_______________________</td><td></td></tr>
+<tr><td>Column type frequency:</td><td></td></tr>
+<tr><td>character</td><td>5</td></tr>
+<tr><td>Date</td><td>1</td></tr>
+<tr><td>numeric</td><td>1</td></tr>
+<tr><td>________________________</td><td></td></tr>
+<tr><td>Group variables</td><td>None</td></tr>
+</table>
 
+
+
+<p><strong>Variable type: character</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>empty</td><td>n_unique</td><td>whitespace</td></tr>
+<tr><td>state</td><td>0</td><td>1.00</td><td>2</td><td>2</td><td>0</td><td>56</td><td>0</td></tr>
+<tr><td>fips</td><td>0</td><td>1.00</td><td>2</td><td>2</td><td>0</td><td>56</td><td>0</td></tr>
+<tr><td>data_quality_grade</td><td>18717</td><td>0.86</td><td>1</td><td>2</td><td>0</td><td>6</td><td>0</td></tr>
+<tr><td>measure</td><td>0</td><td>1.00</td><td>5</td><td>24</td><td>0</td><td>17</td><td>0</td></tr>
+<tr><td>measure_label</td><td>0</td><td>1.00</td><td>6</td><td>54</td><td>0</td><td>17</td><td>0</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: Date</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>median</td><td>n_unique</td></tr>
+<tr><td>date</td><td>0</td><td>1</td><td>2020-01-22</td><td>2020-07-19</td><td>2020-05-12</td><td>180</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: numeric</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>mean</td><td>sd</td><td>p0</td><td>p25</td><td>p50</td><td>p75</td><td>p100</td><td>hist</td></tr>
+<tr><td>count</td><td>74391</td><td>0.43</td><td>64907.84</td><td>275101.6</td><td>0</td><td>151</td><td>1302</td><td>17492.5</td><td>6286852</td><td>▇▁▁▁▁</td></tr>
+</table>
+
+
+
+<p>The measures tracked by the COVID tracking project are as follows:</p><table class='table'>
+<tr><td>measure</td><td>measure_label</td></tr>
+<tr><td>positive</td><td>Positive Tests</td></tr>
+<tr><td>negative</td><td>Negative Tests</td></tr>
+<tr><td>pending</td><td>Pending Tests</td></tr>
+<tr><td>hospitalized_currently</td><td>Currently Hospitalized</td></tr>
+<tr><td>hospitalized_cumulative</td><td>Cumulative Hospitalized</td></tr>
+<tr><td>in_icu_currently</td><td>Currently in ICU</td></tr>
+<tr><td>in_icu_cumulative</td><td>Cumulative in ICU</td></tr>
+<tr><td>on_ventilator_currently</td><td>Currently on Ventilator</td></tr>
+<tr><td>on_ventilator_cumulative</td><td>Cumulative on Ventilator</td></tr>
+<tr><td>recovered</td><td>Recovered</td></tr>
+<tr><td>death</td><td>Deaths</td></tr>
+<tr><td>total_tests_viral</td><td>Total number of PCR tests performed</td></tr>
+<tr><td>positive_tests_viral</td><td>Total number of positive PCR tests</td></tr>
+<tr><td>negative_tests_viral</td><td>Total number of negative PCR tests</td></tr>
+<tr><td>positive_cases_viral</td><td>Total number of positive cases measured with PCR tests</td></tr>
+<tr><td>death_confirmed</td><td>Deaths Confirmed</td></tr>
+<tr><td>death_probable</td><td>Deaths Probable</td></tr>
+</table>
+
+
+
+<p>Not all measures are reported by all states.
+The <code>positive</code>, <code>negative</code>, <code>death</code>, <code>death_confirmed</code>, and <code>death_probable</code> measures are <em>cumulative</em> counts.
+<code>death_confirmed</code> is the total number deaths of individuals with COVID-19 infection confirmed by a laboratory test.
+In states where the information is available, it tracks only those laboratory-confirmed deaths where COVID also contributed
+to the death according to the death certificate. <code>death_probable</code> is the total number of deaths where COVID was listed as a
+cause of death and there is not a laboratory test confirming COVID-19 infection.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
       </span>
     </div>
 
@@ -98,10 +98,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ecdc-data.html">The ECDC Data</a>
+      <a href="../articles/codebook.html">Summary Codebook</a>
     </li>
     <li>
-      <a href="../articles/us-data.html">Case and Mortality Data for the United States</a>
+      <a href="../articles/ecdc-data.html">European Centers for Disease Control Data</a>
+    </li>
+    <li>
+      <a href="../articles/excess-mortality.html">Excess Mortality Data</a>
+    </li>
+    <li>
+      <a href="../articles/us-data.html">U.S. Case and Mortality Data</a>
     </li>
     <li>
       <a href="../articles/mobility-data.html">Mobility Data from Apple and Google</a>
@@ -113,6 +119,9 @@
       <a href="../articles/coronanet-data.html">CoronaNet Data</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -144,13 +153,16 @@
     <p>Provisional Death Counts for Coronavirus Disease (COVID-19)</p>
     </div>
 
-    <pre class="usage"><span class='no'>cdc_deaths_by_age</span></pre>
+    <pre class="usage"><span class='kw'>cdc_deaths_by_age</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 12 rows and 13 variables:</p><dl>
-<dt><code>age_group</code></dt><dd><p>character COLUMN_DESCRIPTION</p></dd>
+    <p>A data frame with 12 rows and 10 variables:</p><dl>
+<dt><code>data_as_of</code></dt><dd><p>date When the data were most recently recorded</p></dd>
+<dt><code>age_group</code></dt><dd><p>character Age range</p></dd>
+<dt><code>start_week</code></dt><dd><p>date Start week</p></dd>
+<dt><code>end_week</code></dt><dd><p>date End week</p></dd>
 <dt><code>covid_deaths</code></dt><dd><p>integer COLUMN_DESCRIPTION</p></dd>
 <dt><code>total_deaths</code></dt><dd><p>integer COLUMN_DESCRIPTION</p></dd>
 <dt><code>percent_expected_deaths</code></dt><dd><p>double COLUMN_DESCRIPTION</p></dd>
@@ -165,7 +177,51 @@
     <p>Courtesy of Bob Rudis's cdccovidview package</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The U.S. Centers for Disease Control provides weekly
+    <p>Table: Data summary</p><table class='table'>
+<tr><td></td><td></td></tr>
+<tr><td>Name</td><td>cdc_deaths_by_age</td></tr>
+<tr><td>Number of rows</td><td>12</td></tr>
+<tr><td>Number of columns</td><td>10</td></tr>
+<tr><td>_______________________</td><td></td></tr>
+<tr><td>Column type frequency:</td><td></td></tr>
+<tr><td>character</td><td>1</td></tr>
+<tr><td>Date</td><td>3</td></tr>
+<tr><td>numeric</td><td>6</td></tr>
+<tr><td>________________________</td><td></td></tr>
+<tr><td>Group variables</td><td>None</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: character</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>empty</td><td>n_unique</td><td>whitespace</td></tr>
+<tr><td>age_group</td><td>0</td><td>1</td><td>5</td><td>10</td><td>0</td><td>12</td><td>0</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: Date</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>median</td><td>n_unique</td></tr>
+<tr><td>data_as_of</td><td>0</td><td>1</td><td>2020-04-30</td><td>2020-04-30</td><td>2020-04-30</td><td>1</td></tr>
+<tr><td>start_week</td><td>0</td><td>1</td><td>2020-02-01</td><td>2020-02-01</td><td>2020-02-01</td><td>1</td></tr>
+<tr><td>end_week</td><td>0</td><td>1</td><td>2020-04-25</td><td>2020-04-25</td><td>2020-04-25</td><td>1</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: numeric</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>mean</td><td>sd</td><td>p0</td><td>p25</td><td>p50</td><td>p75</td><td>p100</td><td>hist</td></tr>
+<tr><td>covid_deaths</td><td>0</td><td>1</td><td>5753.50</td><td>9877.31</td><td>2.00</td><td>30.25</td><td>1211.50</td><td>7918.25</td><td>34521.00</td><td>▇▃▁▁▁</td></tr>
+<tr><td>total_deaths</td><td>0</td><td>1</td><td>118897.67</td><td>202377.07</td><td>712.00</td><td>5675.25</td><td>28460.00</td><td>149341.50</td><td>713386.00</td><td>▇▂▁▁▁</td></tr>
+<tr><td>percent_expected_deaths</td><td>0</td><td>1</td><td>0.97</td><td>0.00</td><td>0.97</td><td>0.97</td><td>0.97</td><td>0.97</td><td>0.97</td><td>▁▁▇▁▁</td></tr>
+<tr><td>pneumonia_deaths</td><td>0</td><td>1</td><td>10454.17</td><td>18036.25</td><td>33.00</td><td>109.00</td><td>1799.50</td><td>14114.25</td><td>62725.00</td><td>▇▃▁▁▁</td></tr>
+<tr><td>pneumonia_and_covid_deaths</td><td>0</td><td>1</td><td>2550.17</td><td>4387.93</td><td>0.00</td><td>12.50</td><td>491.50</td><td>3515.75</td><td>15301.00</td><td>▇▃▁▁▁</td></tr>
+<tr><td>all_influenza_deaths_j09_j11</td><td>0</td><td>1</td><td>970.17</td><td>1618.90</td><td>11.00</td><td>40.75</td><td>358.50</td><td>1222.75</td><td>5821.00</td><td>▇▃▁▁▁</td></tr>
+</table>
+
+
+
+<p>The U.S. Centers for Disease Control provides weekly
 summary and interpretation of key indicators that have been adapted
 to track the COVID-19 pandemic in the United States. Data is
 retrieved using the cdccovidview package from both COVIDView
@@ -175,6 +231,9 @@ and COVID-NET
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://data.cdc.gov/api/views/hc4f-j6nb/rows.csv?accessType=DOWNLOAD&amp;bom=true&amp;format=true'>https://data.cdc.gov/api/views/hc4f-j6nb/rows.csv?accessType=DOWNLOAD&amp;bom=true&amp;format=true</a></p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Kieran Healy</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

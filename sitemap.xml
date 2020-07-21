@@ -43,6 +43,12 @@
     <loc>https://kjhealy.github.io/covdata/reference/covus.html</loc>
   </url>
   <url>
+    <loc>https://kjhealy.github.io/covdata/reference/covus_ethnicity.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/covus_race.html</loc>
+  </url>
+  <url>
     <loc>https://kjhealy.github.io/covdata/reference/fmt_nc.html</loc>
   </url>
   <url>
@@ -53,6 +59,15 @@
   </url>
   <url>
     <loc>https://kjhealy.github.io/covdata/reference/mmwr_week_to_date.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/nchs_pud.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/nchs_sas.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/nchs_wss.html</loc>
   </url>
   <url>
     <loc>https://kjhealy.github.io/covdata/reference/nin.html</loc>
@@ -73,7 +88,28 @@
     <loc>https://kjhealy.github.io/covdata/reference/nytcovus.html</loc>
   </url>
   <url>
+    <loc>https://kjhealy.github.io/covdata/reference/nytexcess.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/reexports.html</loc>
+  </url>
+  <url>
     <loc>https://kjhealy.github.io/covdata/reference/start_date.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/stmf.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/stmf_country_years.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/tabular.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/reference/uspop.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/articles/codebook.html</loc>
   </url>
   <url>
     <loc>https://kjhealy.github.io/covdata/articles/coronanet-data.html</loc>
@@ -83,6 +119,9 @@
   </url>
   <url>
     <loc>https://kjhealy.github.io/covdata/articles/ecdc-data.html</loc>
+  </url>
+  <url>
+    <loc>https://kjhealy.github.io/covdata/articles/excess-mortality.html</loc>
   </url>
   <url>
     <loc>https://kjhealy.github.io/covdata/articles/mobility-data.html</loc>

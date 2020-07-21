@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
       </span>
     </div>
 
@@ -98,10 +98,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ecdc-data.html">The ECDC Data</a>
+      <a href="../articles/codebook.html">Summary Codebook</a>
     </li>
     <li>
-      <a href="../articles/us-data.html">Case and Mortality Data for the United States</a>
+      <a href="../articles/ecdc-data.html">European Centers for Disease Control Data</a>
+    </li>
+    <li>
+      <a href="../articles/excess-mortality.html">Excess Mortality Data</a>
+    </li>
+    <li>
+      <a href="../articles/us-data.html">U.S. Case and Mortality Data</a>
     </li>
     <li>
       <a href="../articles/mobility-data.html">Mobility Data from Apple and Google</a>
@@ -113,6 +119,9 @@
       <a href="../articles/coronanet-data.html">CoronaNet Data</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -144,12 +153,12 @@
     <p>Contains variables from the CoronaNet Government Response Project (<code>https://coronanet-project.org</code>), representing national and sub-national policy event data from more than 140 countries since January 1st, 2020. The data include source links, descriptions, targets (i.e. other countries), the type and level of enforcement, and a comprehensive set of policy types. See below for citation information.</p>
     </div>
 
-    <pre class="usage"><span class='no'>coronanet</span></pre>
+    <pre class="usage"><span class='kw'>coronanet</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A tibble with 13,666 rows and 33 variables:</p><dl>
+    <p>A tibble with 18,074 rows and 33 variables:</p><dl>
 <dt><code>record_id</code></dt><dd><p>character Unique identifier for each unique policy record</p></dd>
 <dt><code>policy_id</code></dt><dd><p>double Identifier linking new policies with subsequent updates to policies</p></dd>
 <dt><code>recorded_date</code></dt><dd><p>date-time When the record was entered into the dataset</p></dd>
@@ -195,7 +204,81 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This file contains variables from the <a href='https://coronanet-project.org/'>CoronaNet government response project</a>, representing national and sub-national policy event data from more than 140 countries since January 1st, 2020. The data include source links, descriptions, targets (i.e. other countries), the type and level of enforcement, and a comprehensive set of policy types. For more detail on this data, you can see <a href='https://docs.google.com/document/d/1zvNMpwj0onFvUZ_gLl4RRjqS-clbHv3TIX6EOHofsME'>the codebook here</a>.
+    <p>Table: Data summary</p><table class='table'>
+<tr><td></td><td></td></tr>
+<tr><td>Name</td><td>coronanet</td></tr>
+<tr><td>Number of rows</td><td>18074</td></tr>
+<tr><td>Number of columns</td><td>33</td></tr>
+<tr><td>_______________________</td><td></td></tr>
+<tr><td>Column type frequency:</td><td></td></tr>
+<tr><td>character</td><td>23</td></tr>
+<tr><td>Date</td><td>2</td></tr>
+<tr><td>numeric</td><td>6</td></tr>
+<tr><td>POSIXct</td><td>2</td></tr>
+<tr><td>________________________</td><td></td></tr>
+<tr><td>Group variables</td><td>None</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: character</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>empty</td><td>n_unique</td><td>whitespace</td></tr>
+<tr><td>record_id</td><td>0</td><td>1.00</td><td>6</td><td>10</td><td>0</td><td>18074</td><td>0</td></tr>
+<tr><td>policy_id</td><td>0</td><td>1.00</td><td>4</td><td>14</td><td>0</td><td>13547</td><td>0</td></tr>
+<tr><td>entry_type</td><td>0</td><td>1.00</td><td>6</td><td>9</td><td>0</td><td>2</td><td>0</td></tr>
+<tr><td>event_description</td><td>0</td><td>1.00</td><td>3</td><td>6463</td><td>0</td><td>13858</td><td>23</td></tr>
+<tr><td>type</td><td>0</td><td>1.00</td><td>6</td><td>54</td><td>0</td><td>21</td><td>0</td></tr>
+<tr><td>type_sub_cat</td><td>6756</td><td>0.63</td><td>5</td><td>140</td><td>0</td><td>108</td><td>0</td></tr>
+<tr><td>country</td><td>0</td><td>1.00</td><td>4</td><td>32</td><td>0</td><td>198</td><td>0</td></tr>
+<tr><td>init_country_level</td><td>0</td><td>1.00</td><td>8</td><td>31</td><td>0</td><td>5</td><td>0</td></tr>
+<tr><td>province</td><td>10610</td><td>0.41</td><td>3</td><td>33</td><td>0</td><td>671</td><td>0</td></tr>
+<tr><td>target_country</td><td>186</td><td>0.99</td><td>4</td><td>1905</td><td>0</td><td>558</td><td>0</td></tr>
+<tr><td>target_geog_level</td><td>11965</td><td>0.34</td><td>13</td><td>62</td><td>0</td><td>6</td><td>0</td></tr>
+<tr><td>target_region</td><td>17864</td><td>0.01</td><td>4</td><td>218</td><td>0</td><td>40</td><td>0</td></tr>
+<tr><td>target_province</td><td>16672</td><td>0.08</td><td>3</td><td>1556</td><td>0</td><td>476</td><td>0</td></tr>
+<tr><td>target_city</td><td>17588</td><td>0.03</td><td>2</td><td>286</td><td>0</td><td>296</td><td>0</td></tr>
+<tr><td>target_other</td><td>18074</td><td>0.00</td><td>NA</td><td>NA</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>target_who_what</td><td>9539</td><td>0.47</td><td>5</td><td>61</td><td>0</td><td>13</td><td>0</td></tr>
+<tr><td>target_direction</td><td>14757</td><td>0.18</td><td>7</td><td>16</td><td>0</td><td>3</td><td>0</td></tr>
+<tr><td>travel_mechanism</td><td>12859</td><td>0.29</td><td>5</td><td>103</td><td>0</td><td>78</td><td>0</td></tr>
+<tr><td>compliance</td><td>457</td><td>0.97</td><td>20</td><td>167</td><td>0</td><td>31</td><td>0</td></tr>
+<tr><td>enforcer</td><td>0</td><td>1.00</td><td>6</td><td>219</td><td>0</td><td>178</td><td>0</td></tr>
+<tr><td>link</td><td>146</td><td>0.99</td><td>1</td><td>1821</td><td>0</td><td>10052</td><td>0</td></tr>
+<tr><td>iso3</td><td>48</td><td>1.00</td><td>1</td><td>3</td><td>0</td><td>197</td><td>0</td></tr>
+<tr><td>iso2</td><td>69</td><td>1.00</td><td>1</td><td>2</td><td>0</td><td>196</td><td>0</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: Date</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>median</td><td>n_unique</td></tr>
+<tr><td>date_start</td><td>0</td><td>1.00</td><td>2019-12-31</td><td>2024-05-29</td><td>2020-03-30</td><td>208</td></tr>
+<tr><td>date_end</td><td>12926</td><td>0.28</td><td>2020-01-28</td><td>2024-05-29</td><td>2020-04-29</td><td>229</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: numeric</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>mean</td><td>sd</td><td>p0</td><td>p25</td><td>p50</td><td>p75</td><td>p100</td><td>hist</td></tr>
+<tr><td>domestic_policy</td><td>0</td><td>1.00</td><td>0.85</td><td>0.36</td><td>0.00</td><td>1.00</td><td>1.00</td><td>1.00</td><td>1.00</td><td>▂▁▁▁▇</td></tr>
+<tr><td>type_text</td><td>17942</td><td>0.01</td><td>19.97</td><td>11.46</td><td>2.00</td><td>14.00</td><td>20.00</td><td>28.00</td><td>85.00</td><td>▆▇▁▁▁</td></tr>
+<tr><td>index_high_est</td><td>3872</td><td>0.79</td><td>53.89</td><td>2.36</td><td>48.29</td><td>52.47</td><td>53.58</td><td>54.98</td><td>70.74</td><td>▅▇▁▁▁</td></tr>
+<tr><td>index_med_est</td><td>3872</td><td>0.79</td><td>52.23</td><td>1.93</td><td>45.42</td><td>51.24</td><td>52.31</td><td>53.46</td><td>57.59</td><td>▁▂▇▆▁</td></tr>
+<tr><td>index_low_est</td><td>3872</td><td>0.79</td><td>50.59</td><td>2.52</td><td>37.19</td><td>49.72</td><td>51.11</td><td>52.13</td><td>56.26</td><td>▁▁▂▇▂</td></tr>
+<tr><td>index_country_rank</td><td>3872</td><td>0.79</td><td>118.99</td><td>53.88</td><td>1.00</td><td>70.00</td><td>124.00</td><td>169.00</td><td>194.00</td><td>▂▅▃▅▇</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: POSIXct</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>median</td><td>n_unique</td></tr>
+<tr><td>recorded_date</td><td>0</td><td>1</td><td>2020-03-28 05:38:17</td><td>2020-07-05 23:34:13</td><td>2020-04-26 08:58:53</td><td>13850</td></tr>
+<tr><td>date_announced</td><td>14</td><td>1</td><td>2019-12-31 00:00:00</td><td>2020-07-05 00:00:00</td><td>2020-03-28 00:00:00</td><td>185</td></tr>
+</table>
+
+
+
+<p>This file contains variables from the <a href='https://coronanet-project.org/'>CoronaNet government response project</a>, representing national and sub-national policy event data from more than 140 countries since January 1st, 2020. The data include source links, descriptions, targets (i.e. other countries), the type and level of enforcement, and a comprehensive set of policy types. For more detail on this data, you can see <a href='https://docs.google.com/document/d/1zvNMpwj0onFvUZ_gLl4RRjqS-clbHv3TIX6EOHofsME'>the codebook here</a>.
 The format of the data is in country-day-<code>record_id</code> format. Some
 <code>record_id</code> values have letters appended to indicate that the
 general policy category <code>type</code> also has a value for
@@ -218,6 +301,9 @@ the corrected data).</p>
 <li><p>Robert Kubinec and Luiz Carvalho, "A Retrospective Bayesian Model for Measuring Covariate Effects on Observed COVID-19 Test and Case Counts", <a href='https://doi.org/10.31235/osf.io/jp4wk'>https://doi.org/10.31235/osf.io/jp4wk</a></p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Kieran Healy</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Google Mobility Data — google_mobility" />
-<meta property="og:description" content="Data from Google's Community Mobility Reports on relative changes in movement trends by location type" />
+<meta property="og:description" content="Data from Google's Community Mobility Reports on relative changes in movement trends by location type." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
       </span>
     </div>
 
@@ -98,10 +98,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ecdc-data.html">The ECDC Data</a>
+      <a href="../articles/codebook.html">Summary Codebook</a>
     </li>
     <li>
-      <a href="../articles/us-data.html">Case and Mortality Data for the United States</a>
+      <a href="../articles/ecdc-data.html">European Centers for Disease Control Data</a>
+    </li>
+    <li>
+      <a href="../articles/excess-mortality.html">Excess Mortality Data</a>
+    </li>
+    <li>
+      <a href="../articles/us-data.html">U.S. Case and Mortality Data</a>
     </li>
     <li>
       <a href="../articles/mobility-data.html">Mobility Data from Apple and Google</a>
@@ -113,6 +119,9 @@
       <a href="../articles/coronanet-data.html">CoronaNet Data</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -141,19 +150,21 @@
     </div>
 
     <div class="ref-description">
-    <p>Data from Google's Community Mobility Reports on relative changes in movement trends by location type</p>
+    <p>Data from Google's Community Mobility Reports on relative changes in movement trends by location type.</p>
     </div>
 
-    <pre class="usage"><span class='no'>google_mobility</span></pre>
+    <pre class="usage"><span class='kw'>google_mobility</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 1,849,962 rows and 7 variables:</p><dl>
+    <p>A data frame with 4,093,596 rows and 9 variables:</p><dl>
 <dt><code>country_region_code</code></dt><dd><p>character Country Code</p></dd>
 <dt><code>country_region</code></dt><dd><p>character Country or Region name</p></dd>
 <dt><code>sub_region_1</code></dt><dd><p>character Subregion (e.g. US state) name</p></dd>
 <dt><code>sub_region_2</code></dt><dd><p>character Subregion (e.g. US county) name</p></dd>
+<dt><code>iso3166_2</code></dt><dd><p>character ISO 3166-2 Country/Region code</p></dd>
+<dt><code>census_fips_code</code></dt><dd><p>character US Census FIPS code</p></dd>
 <dt><code>date</code></dt><dd><p>double Date in yyyy-mm-dd format</p></dd>
 <dt><code>type</code></dt><dd><p>character Type of location. Values are retail, grocery (and pharmacy), parts, transit (hubs/stations), workplaces, and residential</p></dd>
 <dt><code>pct_diff</code></dt><dd><p>integer Percent change from baseline activity</p></dd>
@@ -162,15 +173,56 @@
 
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <p>Google LLC "Google COVID-19 Community Mobility Reports." https://www.google.com/covid19/mobility/ Accessed: 2020-05-09</p>
+    <p>Google LLC "Google COVID-19 Community Mobility Reports." https://www.google.com/covid19/mobility/ Accessed: 2020-07-20</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Location accuracy and the understanding of categorized places varies from region to region, so Google does not recommend using this data to compare changes between countries, or between regions with different characteristics (e.g. rural versus urban areas). Regions or categories are omitted if Google does not have have sufficient statistically significant levels of data for it. Changes for each day are compared to a baseline value for that day of the week. The baseline is the median value, for the corresponding day of the week, during the 5-week period Jan 3–Feb 6, 2020. What data is included in the calculation depends on user settings, connectivity, and whether it meets our privacy threshold. If the privacy threshold isn’t met (when somewhere isn’t busy enough to ensure anonymity) we don’t show a change for the day. As a result, you may encounter empty fields for certain places and dates. We calculate these insights based on data from users who have opted-in to Location History for their Google Account, so the data represents a sample of our users. As with all samples, this may or may not represent the exact behavior of a wider population.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <p>Table: Data summary</p><table class='table'>
+<tr><td></td><td></td></tr>
+<tr><td>Name</td><td>google_mobility</td></tr>
+<tr><td>Number of rows</td><td>4093596</td></tr>
+<tr><td>Number of columns</td><td>9</td></tr>
+<tr><td>_______________________</td><td></td></tr>
+<tr><td>Column type frequency:</td><td></td></tr>
+<tr><td>character</td><td>7</td></tr>
+<tr><td>Date</td><td>1</td></tr>
+<tr><td>numeric</td><td>1</td></tr>
+<tr><td>________________________</td><td></td></tr>
+<tr><td>Group variables</td><td>None</td></tr>
+</table>
 
-    
 
 
+<p><strong>Variable type: character</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>empty</td><td>n_unique</td><td>whitespace</td></tr>
+<tr><td>country_region_code</td><td>7044</td><td>1.00</td><td>2</td><td>2</td><td>0</td><td>134</td><td>0</td></tr>
+<tr><td>country_region</td><td>0</td><td>1.00</td><td>4</td><td>22</td><td>0</td><td>135</td><td>0</td></tr>
+<tr><td>sub_region_1</td><td>121500</td><td>0.97</td><td>3</td><td>74</td><td>0</td><td>1844</td><td>0</td></tr>
+<tr><td>sub_region_2</td><td>1730148</td><td>0.58</td><td>5</td><td>27</td><td>0</td><td>1716</td><td>0</td></tr>
+<tr><td>iso3166_2</td><td>2606028</td><td>0.36</td><td>4</td><td>6</td><td>0</td><td>1703</td><td>0</td></tr>
+<tr><td>census_fips_code</td><td>1729242</td><td>0.58</td><td>5</td><td>5</td><td>0</td><td>2833</td><td>0</td></tr>
+<tr><td>type</td><td>0</td><td>1.00</td><td>5</td><td>11</td><td>0</td><td>6</td><td>0</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: Date</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>min</td><td>max</td><td>median</td><td>n_unique</td></tr>
+<tr><td>date</td><td>0</td><td>1</td><td>2020-02-15</td><td>2020-07-14</td><td>2020-04-29</td><td>151</td></tr>
+</table>
+
+
+
+<p><strong>Variable type: numeric</strong></p><table class='table'>
+<tr><td>skim_variable</td><td>n_missing</td><td>complete_rate</td><td>mean</td><td>sd</td><td>p0</td><td>p25</td><td>p50</td><td>p75</td><td>p100</td><td>hist</td></tr>
+<tr><td>pct_diff</td><td>1360864</td><td>0.67</td><td>-12.61</td><td>31.83</td><td>-100</td><td>-32</td><td>-9</td><td>5</td><td>625</td><td>▇▁▁▁▁</td></tr>
+</table>
+
+
+
+<p>Location accuracy and the understanding of categorized places varies from region to region, so Google does not recommend using this data to compare changes between countries, or between regions with different characteristics (e.g. rural versus urban areas). Regions or categories are omitted if Google does not have have sufficient statistically significant levels of data for it. Changes for each day are compared to a baseline value for that day of the week. The baseline is the median value, for the corresponding day of the week, during the 5-week period Jan 3–Feb 6, 2020. What data is included in the calculation depends on user settings, connectivity, and whether it meets our privacy threshold. If the privacy threshold isn’t met (when somewhere isn’t busy enough to ensure anonymity) we don’t show a change for the day. As a result, you may encounter empty fields for certain places and dates. We calculate these insights based on data from users who have opted-in to Location History for their Google Account, so the data represents a sample of our users. As with all samples, this may or may not represent the exact behavior of a wider population.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Kieran Healy</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
