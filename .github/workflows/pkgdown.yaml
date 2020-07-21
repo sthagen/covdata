@@ -11,6 +11,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@master
+        with:
+          r-version: 'release'
 
       - uses: r-lib/actions/setup-pandoc@master
 
@@ -37,6 +39,11 @@ jobs:
       - name: Install package
         run: R CMD INSTALL .
 
+      - name: Establish git credentials
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+        
       - name: Deploy package
         run: pkgdown::deploy_to_branch(new_process = FALSE)
         shell: Rscript {0}

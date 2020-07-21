@@ -5,15 +5,13 @@
 \alias{countries}
 \title{Country Names and ISO codes}
 \format{
-A data frame with 208 rows and 3 variables:
+A data frame with 215 rows and 4 variables:
 \describe{
 \item{\code{cname}}{character Country name}
 \item{\code{iso3}}{character ISO 3 designation}
 \item{\code{iso2}}{character ISO 2 designation}
+\item{\code{continent}}{Continent}
 }
-}
-\source{
-
 }
 \usage{
 countries
@@ -22,10 +20,32 @@ countries
 Convenience table of country names and their abbreviated names
 }
 \details{
-Produced from the ECDC tables in the covdata package
+Table: Data summary\tabular{ll}{
+    \tab  \cr
+   Name \tab dplyr::ungroup(countries) \cr
+   Number of rows \tab 215 \cr
+   Number of columns \tab 4 \cr
+   _______________________ \tab  \cr
+   Column type frequency: \tab  \cr
+   character \tab 4 \cr
+   ________________________ \tab  \cr
+   Group variables \tab None \cr
+}
+
+
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   cname \tab 0 \tab 1.00 \tab 4 \tab 42 \tab 0 \tab 209 \tab 0 \cr
+   iso3 \tab 0 \tab 1.00 \tab 3 \tab 3 \tab 0 \tab 209 \tab 0 \cr
+   iso2 \tab 2 \tab 0.99 \tab 2 \tab 2 \tab 0 \tab 207 \tab 0 \cr
+   continent \tab 0 \tab 1.00 \tab 4 \tab 13 \tab 0 \tab 6 \tab 0 \cr
+}
+
+
+Produced from the ECDC tables in the covdata package.
 }
 \references{
-
+ISO 2: \url{https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2} ISO 3: \url{https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3}
 }
 \author{
 Kieran Healy

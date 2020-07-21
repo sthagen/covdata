@@ -5,11 +5,14 @@
 \alias{cdc_deaths_by_sex}
 \title{CDC provisional death counts by sex}
 \format{
-A data frame with 4 rows and 13 variables:
+A data frame with 3 rows and 10 variables:
 \describe{
-\item{\code{sex}}{character COLUMN_DESCRIPTION}
-\item{\code{covid_deaths}}{integer COLUMN_DESCRIPTION}
-\item{\code{total_deaths}}{integer COLUMN_DESCRIPTION}
+\item{\code{data_as_of}}{date Date most recently updated}
+\item{\code{sex}}{character Sex}
+\item{\code{start_week}}{date Beginning week}
+\item{\code{end_week}}{date Ending week}
+\item{\code{covid_deaths}}{integer COVID deaths}
+\item{\code{total_deaths}}{integer Total deaths}
 \item{\code{percent_expected_deaths}}{double COLUMN_DESCRIPTION}
 \item{\code{pneumonia_deaths}}{integer COLUMN_DESCRIPTION}
 \item{\code{pneumonia_and_covid_deaths}}{integer COLUMN_DESCRIPTION}
@@ -26,6 +29,46 @@ cdc_deaths_by_sex
 Provisional Death Counts for Coronavirus Disease (COVID-19)
 }
 \details{
+Table: Data summary\tabular{ll}{
+    \tab  \cr
+   Name \tab cdc_deaths_by_sex \cr
+   Number of rows \tab 3 \cr
+   Number of columns \tab 10 \cr
+   _______________________ \tab  \cr
+   Column type frequency: \tab  \cr
+   character \tab 1 \cr
+   Date \tab 3 \cr
+   numeric \tab 6 \cr
+   ________________________ \tab  \cr
+   Group variables \tab None \cr
+}
+
+
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   sex \tab 0 \tab 1 \tab 4 \tab 7 \tab 0 \tab 3 \tab 0 \cr
+}
+
+
+\strong{Variable type: Date}\tabular{lrrlllr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
+   data_as_of \tab 0 \tab 1 \tab 2020-04-30 \tab 2020-04-30 \tab 2020-04-30 \tab 1 \cr
+   start_week \tab 0 \tab 1 \tab 2020-02-01 \tab 2020-02-01 \tab 2020-02-01 \tab 1 \cr
+   end_week \tab 0 \tab 1 \tab 2020-04-25 \tab 2020-04-25 \tab 2020-04-25 \tab 1 \cr
+}
+
+
+\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
+   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
+   covid_deaths \tab 0 \tab 1 \tab 11507.33 \tab 10231.40 \tab 1.00 \tab 7470.50 \tab 14940.00 \tab 17260.50 \tab 19581.00 \tab ▇▁▁▇▇ \cr
+   total_deaths \tab 0 \tab 1 \tab 237795.00 \tab 206241.06 \tab 25.00 \tab 172555.00 \tab 345085.00 \tab 356680.00 \tab 368275.00 \tab ▃▁▁▁▇ \cr
+   percent_expected_deaths \tab 0 \tab 1 \tab 0.97 \tab 0.00 \tab 0.97 \tab 0.97 \tab 0.97 \tab 0.97 \tab 0.97 \tab ▁▁▇▁▁ \cr
+   pneumonia_deaths \tab 0 \tab 1 \tab 20908.33 \tab 18248.40 \tab 1.00 \tab 14545.00 \tab 29089.00 \tab 31362.00 \tab 33635.00 \tab ▃▁▁▁▇ \cr
+   pneumonia_and_covid_deaths \tab 0 \tab 1 \tab 5100.33 \tab 4559.67 \tab 1.00 \tab 3258.00 \tab 6515.00 \tab 7650.00 \tab 8785.00 \tab ▇▁▁▇▇ \cr
+   all_influenza_deaths_j09_j11 \tab 0 \tab 1 \tab 1940.33 \tab 1682.21 \tab 0.00 \tab 1416.00 \tab 2832.00 \tab 2910.50 \tab 2989.00 \tab ▃▁▁▁▇ \cr
+}
+
+
 The U.S. Centers for Disease Control provides weekly
 summary and interpretation of key indicators that have been adapted
 to track the COVID-19 pandemic in the United States. Data is

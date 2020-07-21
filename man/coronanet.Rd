@@ -5,7 +5,7 @@
 \alias{coronanet}
 \title{CoronaNet Government Response Project data}
 \format{
-A tibble with 13,666 rows and 33 variables:
+A tibble with 18,074 rows and 33 variables:
 \describe{
 \item{\code{record_id}}{character Unique identifier for each unique policy record}
 \item{\code{policy_id}}{double Identifier linking new policies with subsequent updates to policies}
@@ -54,6 +54,75 @@ coronanet
 Contains variables from the CoronaNet Government Response Project (\verb{https://coronanet-project.org}), representing national and sub-national policy event data from more than 140 countries since January 1st, 2020. The data include source links, descriptions, targets (i.e. other countries), the type and level of enforcement, and a comprehensive set of policy types. See below for citation information.
 }
 \details{
+Table: Data summary\tabular{ll}{
+    \tab  \cr
+   Name \tab coronanet \cr
+   Number of rows \tab 18074 \cr
+   Number of columns \tab 33 \cr
+   _______________________ \tab  \cr
+   Column type frequency: \tab  \cr
+   character \tab 23 \cr
+   Date \tab 2 \cr
+   numeric \tab 6 \cr
+   POSIXct \tab 2 \cr
+   ________________________ \tab  \cr
+   Group variables \tab None \cr
+}
+
+
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   record_id \tab 0 \tab 1.00 \tab 6 \tab 10 \tab 0 \tab 18074 \tab 0 \cr
+   policy_id \tab 0 \tab 1.00 \tab 4 \tab 14 \tab 0 \tab 13547 \tab 0 \cr
+   entry_type \tab 0 \tab 1.00 \tab 6 \tab 9 \tab 0 \tab 2 \tab 0 \cr
+   event_description \tab 0 \tab 1.00 \tab 3 \tab 6463 \tab 0 \tab 13858 \tab 23 \cr
+   type \tab 0 \tab 1.00 \tab 6 \tab 54 \tab 0 \tab 21 \tab 0 \cr
+   type_sub_cat \tab 6756 \tab 0.63 \tab 5 \tab 140 \tab 0 \tab 108 \tab 0 \cr
+   country \tab 0 \tab 1.00 \tab 4 \tab 32 \tab 0 \tab 198 \tab 0 \cr
+   init_country_level \tab 0 \tab 1.00 \tab 8 \tab 31 \tab 0 \tab 5 \tab 0 \cr
+   province \tab 10610 \tab 0.41 \tab 3 \tab 33 \tab 0 \tab 671 \tab 0 \cr
+   target_country \tab 186 \tab 0.99 \tab 4 \tab 1905 \tab 0 \tab 558 \tab 0 \cr
+   target_geog_level \tab 11965 \tab 0.34 \tab 13 \tab 62 \tab 0 \tab 6 \tab 0 \cr
+   target_region \tab 17864 \tab 0.01 \tab 4 \tab 218 \tab 0 \tab 40 \tab 0 \cr
+   target_province \tab 16672 \tab 0.08 \tab 3 \tab 1556 \tab 0 \tab 476 \tab 0 \cr
+   target_city \tab 17588 \tab 0.03 \tab 2 \tab 286 \tab 0 \tab 296 \tab 0 \cr
+   target_other \tab 18074 \tab 0.00 \tab NA \tab NA \tab 0 \tab 0 \tab 0 \cr
+   target_who_what \tab 9539 \tab 0.47 \tab 5 \tab 61 \tab 0 \tab 13 \tab 0 \cr
+   target_direction \tab 14757 \tab 0.18 \tab 7 \tab 16 \tab 0 \tab 3 \tab 0 \cr
+   travel_mechanism \tab 12859 \tab 0.29 \tab 5 \tab 103 \tab 0 \tab 78 \tab 0 \cr
+   compliance \tab 457 \tab 0.97 \tab 20 \tab 167 \tab 0 \tab 31 \tab 0 \cr
+   enforcer \tab 0 \tab 1.00 \tab 6 \tab 219 \tab 0 \tab 178 \tab 0 \cr
+   link \tab 146 \tab 0.99 \tab 1 \tab 1821 \tab 0 \tab 10052 \tab 0 \cr
+   iso3 \tab 48 \tab 1.00 \tab 1 \tab 3 \tab 0 \tab 197 \tab 0 \cr
+   iso2 \tab 69 \tab 1.00 \tab 1 \tab 2 \tab 0 \tab 196 \tab 0 \cr
+}
+
+
+\strong{Variable type: Date}\tabular{lrrlllr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
+   date_start \tab 0 \tab 1.00 \tab 2019-12-31 \tab 2024-05-29 \tab 2020-03-30 \tab 208 \cr
+   date_end \tab 12926 \tab 0.28 \tab 2020-01-28 \tab 2024-05-29 \tab 2020-04-29 \tab 229 \cr
+}
+
+
+\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
+   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
+   domestic_policy \tab 0 \tab 1.00 \tab 0.85 \tab 0.36 \tab 0.00 \tab 1.00 \tab 1.00 \tab 1.00 \tab 1.00 \tab ▂▁▁▁▇ \cr
+   type_text \tab 17942 \tab 0.01 \tab 19.97 \tab 11.46 \tab 2.00 \tab 14.00 \tab 20.00 \tab 28.00 \tab 85.00 \tab ▆▇▁▁▁ \cr
+   index_high_est \tab 3872 \tab 0.79 \tab 53.89 \tab 2.36 \tab 48.29 \tab 52.47 \tab 53.58 \tab 54.98 \tab 70.74 \tab ▅▇▁▁▁ \cr
+   index_med_est \tab 3872 \tab 0.79 \tab 52.23 \tab 1.93 \tab 45.42 \tab 51.24 \tab 52.31 \tab 53.46 \tab 57.59 \tab ▁▂▇▆▁ \cr
+   index_low_est \tab 3872 \tab 0.79 \tab 50.59 \tab 2.52 \tab 37.19 \tab 49.72 \tab 51.11 \tab 52.13 \tab 56.26 \tab ▁▁▂▇▂ \cr
+   index_country_rank \tab 3872 \tab 0.79 \tab 118.99 \tab 53.88 \tab 1.00 \tab 70.00 \tab 124.00 \tab 169.00 \tab 194.00 \tab ▂▅▃▅▇ \cr
+}
+
+
+\strong{Variable type: POSIXct}\tabular{lrrlllr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
+   recorded_date \tab 0 \tab 1 \tab 2020-03-28 05:38:17 \tab 2020-07-05 23:34:13 \tab 2020-04-26 08:58:53 \tab 13850 \cr
+   date_announced \tab 14 \tab 1 \tab 2019-12-31 00:00:00 \tab 2020-07-05 00:00:00 \tab 2020-03-28 00:00:00 \tab 185 \cr
+}
+
+
 This file contains variables from the \href{https://coronanet-project.org/}{CoronaNet government response project}, representing national and sub-national policy event data from more than 140 countries since January 1st, 2020. The data include source links, descriptions, targets (i.e. other countries), the type and level of enforcement, and a comprehensive set of policy types. For more detail on this data, you can see \href{https://docs.google.com/document/d/1zvNMpwj0onFvUZ_gLl4RRjqS-clbHv3TIX6EOHofsME}{the codebook here}.
 The format of the data is in country-day-\code{record_id} format. Some
 \code{record_id} values have letters appended to indicate that the

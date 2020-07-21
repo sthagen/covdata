@@ -29,6 +29,39 @@ National Syndromic Surveillance Program (NSSP):
 Emergency Department Visits and Percentage of Visits for COVID-19-Like Illness (CLI) or Influenza-like Illness (ILI)
 }
 \details{
+Table: Data summary\tabular{ll}{
+    \tab  \cr
+   Name \tab nssp_covid_er_nat \cr
+   Number of rows \tab 54 \cr
+   Number of columns \tab 9 \cr
+   _______________________ \tab  \cr
+   Column type frequency: \tab  \cr
+   character \tab 4 \cr
+   numeric \tab 5 \cr
+   ________________________ \tab  \cr
+   Group variables \tab None \cr
+}
+
+
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   total_ed_visits \tab 0 \tab 1 \tab 7 \tab 7 \tab 0 \tab 27 \tab 0 \cr
+   visit_type \tab 0 \tab 1 \tab 3 \tab 3 \tab 0 \tab 2 \tab 0 \cr
+   region \tab 0 \tab 1 \tab 8 \tab 8 \tab 0 \tab 1 \tab 0 \cr
+   source \tab 0 \tab 1 \tab 21 \tab 21 \tab 0 \tab 1 \tab 0 \cr
+}
+
+
+\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
+   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
+   week \tab 0 \tab 1 \tab 26.04 \tab 19.81 \tab 1.00 \tab 7.25 \tab 14.00 \tab 45.75 \tab 52.00 \tab ▇▂▁▂▇ \cr
+   num_fac \tab 0 \tab 1 \tab 3346.89 \tab 48.97 \tab 3249.00 \tab 3329.50 \tab 3352.00 \tab 3389.50 \tab 3406.00 \tab ▃▁▆▃▇ \cr
+   visits \tab 0 \tab 1 \tab 41521.67 \tab 16344.25 \tab 17639.00 \tab 31216.00 \tab 39183.50 \tab 50532.00 \tab 86088.00 \tab ▅▇▃▂▁ \cr
+   pct_visits \tab 0 \tab 1 \tab 0.02 \tab 0.01 \tab 0.01 \tab 0.01 \tab 0.02 \tab 0.02 \tab 0.05 \tab ▇▆▂▁▂ \cr
+   year \tab 0 \tab 1 \tab 2019.52 \tab 0.50 \tab 2019.00 \tab 2019.00 \tab 2020.00 \tab 2020.00 \tab 2020.00 \tab ▇▁▁▁▇ \cr
+}
+
+
 The U.S. Centers for Disease Control provides weekly
 summary and interpretation of key indicators that have been adapted
 to track the COVID-19 pandemic in the United States. Data is

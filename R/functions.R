@@ -1,3 +1,7 @@
+#' @importFrom magrittr %>%
+#' @export
+magrittr::`%>%`
+
 #' Convenience 'not-in' operator
 #'
 #' Complement of the built-in operator `%in%`. Returns the elements of `x` that are not in `y`.
@@ -28,9 +32,8 @@
 #'  }
 #' }
 #' @rdname MMWRweekday
-#' @author
+#' @author Kieran Healy
 #' @source http://
-#' @references
 MMWRweekday <- function (date)
 {
   factor(strftime(as.Date(date), "%w"), levels = 0:6, labels = c("Sunday",
@@ -50,9 +53,8 @@ MMWRweekday <- function (date)
 #'  }
 #' }
 #' @rdname start_date
-#' @author
+#' @author AUTHOR_NAME
 #' @source http://
-#' @references
 start_date <- function (year)
 {
   jan1 = as.Date(paste(year, "-01-01", sep = ""))
@@ -77,7 +79,6 @@ start_date <- function (year)
 #' @rdname MMWRweek2Date
 #' @author Kieran Healy
 #' @source http://
-#' @references
 MMWRweek2Date <- function (MMWRyear, MMWRweek, MMWRday = NULL)
 {
   stopifnot(all(is.numeric(MMWRyear)))
@@ -110,7 +111,6 @@ MMWRweek2Date <- function (MMWRyear, MMWRweek, MMWRday = NULL)
 #' @author Kieran Healy
 #' @source http://
 #' @export
-#' @references
 mmwr_week_to_date <- function (year, week, day = NULL)
 {
   year <- as.numeric(year)
@@ -158,4 +158,59 @@ fmt_nr <- function(x){
   prettyNum(nrow(x), big.mark=",", scientific=FALSE)
 }
 
+#' @title tabular
+#' @description Make an Rd table from a data frame
+#' @param df Data frame
+#' @param ... Other args
+#' @return Rd table
+#' @details DETAILS
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @author Kieran Healy
+#' @source http://
+tabular <- function(df, ...) {
+  stopifnot(is.data.frame(df))
 
+  align <- function(x) if (is.numeric(x)) "r" else "l"
+  col_align <- vapply(df, align, character(1))
+
+  cols <- lapply(df, format, ...)
+  contents <- do.call("paste",
+                      c(cols, list(sep = " \\tab ", collapse = "\\cr\n#'   ")))
+
+  paste("#' \\tabular{", paste(col_align, collapse = ""), "}{\n#'   ",
+        paste0("\\strong{", names(df), "}", sep = "", collapse = " \\tab "), " \\cr\n#'   ",
+        contents, "\n#' }\n", sep = "")
+}
+
+#' Make a table of stmf country years
+#'
+#' @param df The stmf data frame
+#' @return A tibble
+#' @details Get a table of country x year coverage for stmf
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @author Kieran Healy
+#' @source http://
+stmf_country_years <- function(df = stmf) {
+
+  df %>%
+    dplyr::select(cname, year) %>%
+    dplyr::group_by(cname, year) %>%
+    dplyr::tally() %>%
+    dplyr::mutate(n = as.character(n),
+           n = dplyr::recode(n, "0" = "-", .default = "Y")) %>%
+    dplyr::group_by(year, cname) %>%
+    dplyr::arrange(year) %>%
+    tidyr::pivot_wider(names_from = year, values_from = n) %>%
+    dplyr::mutate(dplyr::across(where(is.character), dplyr::recode, .missing = "-")) %>%
+    dplyr::arrange(cname)
+}

@@ -3,15 +3,17 @@
 \docType{data}
 \name{covus}
 \alias{covus}
-\title{COVID-19 data for the USA, current as of Saturday, May  9, 2020}
+\title{COVID-19 data for the USA, current as of Monday, July 20, 2020}
 \format{
-A tibble with 65,826 rows and 5 columns
+A tibble with 129,761 rows and 7 columns
 \describe{
 \item{date}{Date in YYYY-MM-DD format (date)}
 \item{state}{Two letter State abbreviation (character)}
 \item{fips}{State FIPS code (character)}
+\item{\code{data_quality_grade}}{character Data quality as assessed by COVID Tracking Project staff}
 \item{measure}{Outcome measure for this date}
 \item{count}{Count of measure}
+\item{\code{measure_label}}{character Outcome measure, suitable for use as a plot label}
 }
 }
 \source{
@@ -24,25 +26,70 @@ covus
 A dataset containing US state-level data on COVID-19
 }
 \details{
-The measures tracked by the COVID tracking project are as follows:
-\itemize{
-\item \code{positive} Total cumulative positive test results.
-\item \code{positive_increase} Increase in positive cases from the day before.
-\item \code{negative} Total cumulative negative test results.
-\item \code{negative_increase} Increase in negative cases from the day before.
-\item \code{pending} Tests that have been submitted to a lab but no results have been reported yet.
-\item \code{hospitalized_currently} Total number of people hospitalized on date.
-\item \code{hospitalized_cumulative} Total cumulative number of people hospitalized by date.
-\item \code{in_icu_currently}  Total number of people in intensive care unit on date.
-\item \code{in_icu_cumulative} Total cumulative number of people in intensive care unit by date.
-\item \code{on_ventilator_currently}  Total number of people on ventilator on date.
-\item \code{on_ventilator_cumulative} Total cumulative number of people on ventilator by date.
-\item \code{recovered} Total number recovered.
-\item \code{death} Total number of deaths.
-\item \code{death_increase} Increase in deaths from the day before.
-\item \code{total_test_results} Calculated value (positive + negative) of total test results.
-\item \code{total_test_results_increase} Increase in total test results from the day before
-Not all measures are reported by all states.
+Table: Data summary\tabular{ll}{
+    \tab  \cr
+   Name \tab covus \cr
+   Number of rows \tab 129761 \cr
+   Number of columns \tab 7 \cr
+   _______________________ \tab  \cr
+   Column type frequency: \tab  \cr
+   character \tab 5 \cr
+   Date \tab 1 \cr
+   numeric \tab 1 \cr
+   ________________________ \tab  \cr
+   Group variables \tab None \cr
 }
+
+
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   state \tab 0 \tab 1.00 \tab 2 \tab 2 \tab 0 \tab 56 \tab 0 \cr
+   fips \tab 0 \tab 1.00 \tab 2 \tab 2 \tab 0 \tab 56 \tab 0 \cr
+   data_quality_grade \tab 18717 \tab 0.86 \tab 1 \tab 2 \tab 0 \tab 6 \tab 0 \cr
+   measure \tab 0 \tab 1.00 \tab 5 \tab 24 \tab 0 \tab 17 \tab 0 \cr
+   measure_label \tab 0 \tab 1.00 \tab 6 \tab 54 \tab 0 \tab 17 \tab 0 \cr
+}
+
+
+\strong{Variable type: Date}\tabular{lrrlllr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
+   date \tab 0 \tab 1 \tab 2020-01-22 \tab 2020-07-19 \tab 2020-05-12 \tab 180 \cr
+}
+
+
+\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
+   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
+   count \tab 74391 \tab 0.43 \tab 64907.84 \tab 275101.6 \tab 0 \tab 151 \tab 1302 \tab 17492.5 \tab 6286852 \tab ▇▁▁▁▁ \cr
+}
+
+
+The measures tracked by the COVID tracking project are as follows:\tabular{ll}{
+   measure \tab measure_label \cr
+   positive \tab Positive Tests \cr
+   negative \tab Negative Tests \cr
+   pending \tab Pending Tests \cr
+   hospitalized_currently \tab Currently Hospitalized \cr
+   hospitalized_cumulative \tab Cumulative Hospitalized \cr
+   in_icu_currently \tab Currently in ICU \cr
+   in_icu_cumulative \tab Cumulative in ICU \cr
+   on_ventilator_currently \tab Currently on Ventilator \cr
+   on_ventilator_cumulative \tab Cumulative on Ventilator \cr
+   recovered \tab Recovered \cr
+   death \tab Deaths \cr
+   total_tests_viral \tab Total number of PCR tests performed \cr
+   positive_tests_viral \tab Total number of positive PCR tests \cr
+   negative_tests_viral \tab Total number of negative PCR tests \cr
+   positive_cases_viral \tab Total number of positive cases measured with PCR tests \cr
+   death_confirmed \tab Deaths Confirmed \cr
+   death_probable \tab Deaths Probable \cr
+}
+
+
+Not all measures are reported by all states.
+The \code{positive}, \code{negative}, \code{death}, \code{death_confirmed}, and \code{death_probable} measures are \emph{cumulative} counts.
+\code{death_confirmed} is the total number deaths of individuals with COVID-19 infection confirmed by a laboratory test.
+In states where the information is available, it tracks only those laboratory-confirmed deaths where COVID also contributed
+to the death according to the death certificate. \code{death_probable} is the total number of deaths where COVID was listed as a
+cause of death and there is not a laboratory test confirming COVID-19 infection.
 }
 \keyword{datasets}

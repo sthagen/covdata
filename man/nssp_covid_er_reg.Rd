@@ -5,7 +5,7 @@
 \alias{nssp_covid_er_reg}
 \title{NSSP Regional COVID ER Visits}
 \format{
-A data frame with 538 rows and 9 variables:
+A tibble with 538 rows and 9 variables:
 \describe{
 \item{\code{week}}{integer COLUMN_DESCRIPTION}
 \item{\code{num_fac}}{integer COLUMN_DESCRIPTION}
@@ -29,6 +29,39 @@ Regional Syndromic Surveillance Program (NSSP):
 Emergency Department Visits and Percentage of Visits for COVID-19-Like Illness (CLI) or Influenza-like Illness (ILI)
 }
 \details{
+Table: Data summary\tabular{ll}{
+    \tab  \cr
+   Name \tab nssp_covid_er_reg \cr
+   Number of rows \tab 538 \cr
+   Number of columns \tab 9 \cr
+   _______________________ \tab  \cr
+   Column type frequency: \tab  \cr
+   character \tab 4 \cr
+   numeric \tab 5 \cr
+   ________________________ \tab  \cr
+   Group variables \tab None \cr
+}
+
+
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   total_ed_visits \tab 0 \tab 1 \tab 5 \tab 6 \tab 0 \tab 269 \tab 0 \cr
+   visit_type \tab 0 \tab 1 \tab 3 \tab 3 \tab 0 \tab 2 \tab 0 \cr
+   region \tab 0 \tab 1 \tab 8 \tab 9 \tab 0 \tab 10 \tab 0 \cr
+   source \tab 0 \tab 1 \tab 21 \tab 21 \tab 0 \tab 1 \tab 0 \cr
+}
+
+
+\strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
+   skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
+   week \tab 0 \tab 1 \tab 25.99 \tab 19.66 \tab 1 \tab 7.00 \tab 14.00 \tab 46.00 \tab 52.00 \tab ▇▂▁▂▇ \cr
+   num_fac \tab 0 \tab 1 \tab 335.18 \tab 234.58 \tab 135 \tab 190.00 \tab 222.00 \tab 343.00 \tab 884.00 \tab ▇▃▁▂▂ \cr
+   visits \tab 0 \tab 1 \tab 4164.87 \tab 4028.53 \tab 279 \tab 1596.00 \tab 2780.00 \tab 4723.75 \tab 23345.00 \tab ▇▂▁▁▁ \cr
+   pct_visits \tab 0 \tab 1 \tab 0.02 \tab 0.01 \tab 0 \tab 0.01 \tab 0.02 \tab 0.02 \tab 0.11 \tab ▇▂▁▁▁ \cr
+   year \tab 0 \tab 1 \tab 2019.52 \tab 0.50 \tab 2019 \tab 2019.00 \tab 2020.00 \tab 2020.00 \tab 2020.00 \tab ▇▁▁▁▇ \cr
+}
+
+
 The U.S. Centers for Disease Control provides weekly
 summary and interpretation of key indicators that have been adapted
 to track the COVID-19 pandemic in the United States. Data is

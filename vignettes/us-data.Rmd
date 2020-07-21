@@ -1,5 +1,5 @@
 ---
-title: "Case and Mortality Data for the United States"
+title: "U.S. Case and Mortality Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{us-data}
@@ -27,6 +27,7 @@ Data for the United States come from a variety of sources:
 - State-level case and mortality data for the United States from the [COVID Tracking Project](https://covidtracking.com). 
 - State-level and county-level case and mortality data for the United States from the [_New York Times_](https://github.com/nytimes/covid-19-data).
 - Data from the US Centers for Disease Control's [Coronavirus Disease 2019 (COVID-19)-Associated Hospitalization Surveillance](https://gis.cdc.gov/grasp/covidnet/COVID19_3.html). 
+- State- and national-level reports from the United States [National Center for Health Statistics](https://www.cdc.gov/nchs/).
 
 
 ## COVID Tracking Project data
@@ -37,7 +38,7 @@ covus
 
 ### Draw a log-linear graph of cumulative reported US cases.
 
-```{r us-example, fig.height=8, fig.width=10, dpi=100}
+```{r us-example, fig.height=8, fig.width=12, dpi=100}
 ## Which n states are leading the count of positive cases or deaths?
 top_n_states <- function(data, n = 5, measure = c("positive", "death")) {
   meas <- match.arg(measure)
@@ -66,10 +67,10 @@ covus %>%
   geom_line(size = 0.5) + 
   geom_text_repel(segment.color = NA, nudge_x = 0.2, nudge_y = 0.1) + 
   scale_color_manual(values = state_cols) + 
-  scale_x_date(date_breaks = "3 days", date_labels = "%b %e" ) + 
+  scale_x_date(date_breaks = "1 week", date_labels = "%b %e" ) + 
   scale_y_continuous(trans = "log2",
                      labels = scales::comma_format(accuracy = 1),
-                     breaks = 2^c(seq(1, 18, 1))) +
+                     breaks = 2^c(seq(1, 19, 1))) +
   guides(color = FALSE) + 
   labs(title = "COVID-19 Cumulative Recorded Cases by US State",
        subtitle = paste("Data as of", format(max(covus$date), "%A, %B %e, %Y")),
@@ -77,6 +78,101 @@ covus %>%
        caption = "Data: COVID Tracking Project, http://covidtracking.com | Graph: @kjhealy") + 
   theme_minimal()
 ```
+
+### Calculating daily counts
+
+The COVID Tracking Project reports _cumulative_ counts for key measures such as positive tests and deaths. For example, for New York State:
+
+```{r nystate-ex1}
+
+measures <- c("positive", "negative", "death")
+
+covus %>%
+  filter(measure %in% measures, state == "NY") %>%
+  select(date, state, measure, count) %>%
+  pivot_wider(names_from = measure, values_from = count)
+
+```
+
+To calculate _daily_ counts from these cumulative measures, use `lag()`.
+
+```{r nydaily}
+
+covus %>%
+  filter(measure %in% measures, state == "NY") %>%
+  select(date, state, measure, count) %>%
+  pivot_wider(names_from = measure, values_from = count) %>%
+  mutate(across(positive:death, ~.x - lag(.x, order_by = date), 
+                .names = "daily_{col}"))
+
+
+```
+
+
+### Draw a graph of the weekly rolling average death rate, by state
+
+```{r rolling-state, fig.height=16, fig.width=8, dpi=100}
+
+state_pops <- uspop %>%
+  filter(sex_id == "totsex", hisp_id == "tothisp") %>%
+  select(state_abbr, statefips, pop, state) %>%
+  rename(name = state, 
+         state = state_abbr, fips = statefips) %>%
+  mutate(state = replace(state, fips == "11", "DC"))
+
+## Using a convenience function to do something similar
+## to the lambda version above
+get_daily_count <- function(count, date){
+  count - lag(count, order_by = date)
+}
+
+
+covus %>%
+  filter(measure == "death", state %in% unique(state_pops$state)) %>%
+  group_by(state) %>%
+  mutate(
+    deaths_daily = get_daily_count(count, date), 
+    deaths7 = slider::slide_dbl(deaths_daily, mean, .before = 7, .after = 0, na.rm = TRUE)) %>%
+  left_join(state_pops) %>%
+  filter(date > lubridate::ymd("2020-03-15")) %>%
+  ggplot(mapping = aes(x = date, y = (deaths7/pop)*1e5)) + 
+  geom_line(size = 0.5) + 
+  scale_y_continuous(labels = scales::comma_format(accuracy = 1)) + 
+  facet_wrap(~ name, ncol = 4) +
+  labs(x = "Date", 
+       y = "Deaths per 100,000 Population (Seven Day Rolling Average)", 
+       title = "Average Death Rate from COVID-19: US States and Washington, DC", 
+       subtitle = paste("COVID Tracking Project data as of", format(max(covnat$date), "%A, %B %e, %Y")), 
+       caption = "Kieran Healy @kjhealy / Data: https://www.covidtracking.com/") +
+  theme_minimal()
+
+```
+
+
+### Draw a graph of the weekly rolling average death rate, by state, with free y-axes in the panels
+
+```{r rolling-state-free, fig.height=16, fig.width=8, dpi=100}
+
+covus %>%
+  filter(measure == "death", state %in% unique(state_pops$state)) %>%
+  group_by(state) %>%
+  mutate(
+    deaths_daily = get_daily_count(count, date), 
+    deaths7 = slider::slide_dbl(deaths_daily, mean, .before = 7, .after = 0, na.rm = TRUE)) %>%
+  left_join(state_pops) %>%
+  filter(date > lubridate::ymd("2020-03-15")) %>%
+  ggplot(mapping = aes(x = date, y = (deaths7/pop)*1e5)) + 
+  geom_line(size = 0.5) + 
+  facet_wrap(~ name, ncol = 4, scales = "free_y") +
+  labs(x = "Date", 
+       y = "Deaths per 100,000 Population (Seven Day Rolling Average)", 
+       title = "Average Death Rate from COVID-19: US States and Washington, DC. Free scales.", 
+       subtitle = paste("COVID Tracking Project data as of", format(max(covnat$date), "%A, %B %e, %Y")), 
+       caption = "Kieran Healy @kjhealy / Data: https://www.covidtracking.com/") +
+  theme_minimal()
+
+```
+
 
 ### Draw a graph of cumulative reported US deaths, aggregated to the national level
 
@@ -87,8 +183,8 @@ covus %>%
   summarize(count = sum(count, na.rm = TRUE)) %>%
   ggplot(aes(x = date, y = count)) + 
   geom_line(size = 0.75) + 
-  scale_x_date(date_breaks = "1 week", date_labels = "%b %e" ) + 
-  scale_y_continuous(labels = scales::comma, breaks = seq(0, 60000, 10000)) + 
+  scale_x_date(date_breaks = "2 weeks", date_labels = "%b %e" ) + 
+  scale_y_continuous(labels = scales::comma, breaks = seq(0, 160000, 20000)) + 
   labs(title = "COVID-19 Cumulative Recorded Deaths in the United States",
        subtitle = paste("Data as of", format(max(covus$date), "%A, %B %e, %Y"), "Recorded counts underestimate total mortality."),
        x = "Date", y = "Count of Deaths", 
@@ -158,7 +254,7 @@ nssp_covid_er_reg
 
 ### Summary view of CDC Surveillance Network Data
 
-```{r cdc-example, fig.height=5, fig.width=9, dpi=150}
+```{r cdc-example, fig.height=5, fig.width=12, dpi=150}
 
 age_f <- c(
   "0-4 yr", "5-17 yr", "18-49 yr", 
@@ -175,7 +271,7 @@ cdc_hospitalizations %>%
   ggplot() +
   geom_line(aes(start, weekly_rate)) +
   scale_x_date(
-    date_breaks = "2 weeks", date_labels = "%b\n%d"
+    date_breaks = "8 weeks", date_labels = "%b\n%d"
   ) +
   facet_grid(network ~ age_category) +
   labs(x = NULL, y = "Rates per 100,000 pop",
@@ -185,4 +281,3 @@ cdc_hospitalizations %>%
   theme_minimal()
 
 ```
-

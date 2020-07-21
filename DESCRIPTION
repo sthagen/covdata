@@ -1,27 +1,32 @@
 Package: covdata
 Type: Package
 Title: COVID-19 Data
-Version: 0.1.8.9000
+Version: 0.3.1.9000
 Authors@R: 
     person(given = "Kieran",
            family = "Healy",
            role = c("aut", "cre"),
            email = "kjhealy@gmail.com",
            comment = c(ORCID = "https://orcid.org/0000-0001-9114-981X"))
-Description: COVID-19 related data from the ECDC, the COVID-19 Tracking Project, the New York Times, and Apple, packaged for R.
+Description: COVID-19 related data from the ECDC, the COVID-19 Tracking Project, the New York Times, the Human Mortality Database, Apple, and Google. Packaged for R.
 Depends: R (>= 2.10)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 URL: https://github.com/kjhealy/covdata
 BugReports: https://github.com/kjhealy/covdata/issues
+Imports: dplyr, magrittr, tidyr
 Suggests: 
     ggforce,
-    ggrepel,    
+    ggrepel,
+    lubridate,
     knitr,
     rmarkdown,
     scales,
-    tidyverse
+    skimr,
+    slider,
+    tidyverse,
+    testthat
 VignetteBuilder: knitr
