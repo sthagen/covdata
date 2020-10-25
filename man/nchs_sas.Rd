@@ -5,7 +5,7 @@
 \alias{nchs_sas}
 \title{Provisional COVID-19 Death Counts by Sex, Age, and State}
 \format{
-A tibble with 1,362 rows and 12 variables:
+A tibble with 2,661 rows and 12 variables:
 \describe{
 \item{\code{data_as_of}}{date Date of data release}
 \item{\code{start_week}}{date First week-ending date of data period}
@@ -34,42 +34,42 @@ Deaths involving coronavirus disease 2019 (COVID-19), pneumonia, and influenza r
 Table: Data summary\tabular{ll}{
     \tab  \cr
    Name \tab nchs_sas \cr
-   Number of rows \tab 1362 \cr
+   Number of rows \tab 2661 \cr
    Number of columns \tab 12 \cr
    _______________________ \tab  \cr
    Column type frequency: \tab  \cr
-   character \tab 3 \cr
    Date \tab 3 \cr
+   character \tab 3 \cr
    numeric \tab 6 \cr
    ________________________ \tab  \cr
    Group variables \tab None \cr
 }
 
 
-\strong{Variable type: character}\tabular{lrrrrrrr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
-   state \tab 0 \tab 1 \tab 4 \tab 20 \tab 0 \tab 54 \tab 0 \cr
-   sex \tab 0 \tab 1 \tab 3 \tab 7 \tab 0 \tab 4 \tab 0 \cr
-   age_group \tab 0 \tab 1 \tab 8 \tab 17 \tab 0 \tab 12 \tab 0 \cr
+\strong{Variable type: Date}\tabular{lrrlllr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
+   data_as_of \tab 0 \tab 1 \tab 2020-10-07 \tab 2020-10-07 \tab 2020-10-07 \tab 1 \cr
+   start_week \tab 0 \tab 1 \tab 2020-02-01 \tab 2020-02-01 \tab 2020-02-01 \tab 1 \cr
+   end_week \tab 0 \tab 1 \tab 2020-10-03 \tab 2020-10-03 \tab 2020-10-03 \tab 1 \cr
 }
 
 
-\strong{Variable type: Date}\tabular{lrrlllr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
-   data_as_of \tab 0 \tab 1 \tab 2020-07-15 \tab 2020-07-15 \tab 2020-07-15 \tab 1 \cr
-   start_week \tab 0 \tab 1 \tab 2020-02-01 \tab 2020-02-01 \tab 2020-02-01 \tab 1 \cr
-   end_week \tab 0 \tab 1 \tab 2020-07-11 \tab 2020-07-11 \tab 2020-07-11 \tab 1 \cr
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   state \tab 0 \tab 1 \tab 4 \tab 20 \tab 0 \tab 54 \tab 0 \cr
+   sex \tab 0 \tab 1 \tab 4 \tab 9 \tab 0 \tab 4 \tab 0 \cr
+   age_group \tab 0 \tab 1 \tab 8 \tab 17 \tab 0 \tab 16 \tab 0 \cr
 }
 
 
 \strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
    skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
-   covid_19_deaths \tab 277 \tab 0.80 \tab 670.40 \tab 5052.61 \tab 0 \tab 0 \tab 18.0 \tab 139.00 \tab 121374 \tab ▇▁▁▁▁ \cr
-   total_deaths \tab 130 \tab 0.90 \tab 6757.92 \tab 53323.21 \tab 0 \tab 70 \tab 429.0 \tab 2248.75 \tab 1387325 \tab ▇▁▁▁▁ \cr
-   pneumonia_deaths \tab 330 \tab 0.76 \tab 762.77 \tab 5568.38 \tab 0 \tab 0 \tab 47.5 \tab 247.50 \tab 131332 \tab ▇▁▁▁▁ \cr
-   pneumonia_and_covid_19_deaths \tab 294 \tab 0.78 \tab 293.62 \tab 2195.25 \tab 0 \tab 0 \tab 0.0 \tab 59.00 \tab 52431 \tab ▇▁▁▁▁ \cr
-   influenza_deaths \tab 533 \tab 0.61 \tab 45.16 \tab 301.01 \tab 0 \tab 0 \tab 0.0 \tab 17.00 \tab 6519 \tab ▇▁▁▁▁ \cr
-   pneumonia_influenza_or_covid_19_deaths \tab 359 \tab 0.74 \tab 1230.47 \tab 8858.99 \tab 0 \tab 12 \tab 76.0 \tab 385.00 \tab 205837 \tab ▇▁▁▁▁ \cr
+   covid_19_deaths \tab 402 \tab 0.85 \tab 672.20 \tab 5849.36 \tab 0 \tab 0 \tab 0 \tab 101.0 \tab 198809 \tab ▇▁▁▁▁ \cr
+   total_deaths \tab 182 \tab 0.93 \tab 6774.18 \tab 59633.69 \tab 0 \tab 0 \tab 169 \tab 1662.0 \tab 2150188 \tab ▇▁▁▁▁ \cr
+   pneumonia_deaths \tab 480 \tab 0.82 \tab 713.78 \tab 6060.94 \tab 0 \tab 0 \tab 10 \tab 160.0 \tab 203068 \tab ▇▁▁▁▁ \cr
+   pneumonia_and_covid_19_deaths \tab 381 \tab 0.86 \tab 302.61 \tab 2640.96 \tab 0 \tab 0 \tab 0 \tab 42.0 \tab 89981 \tab ▇▁▁▁▁ \cr
+   influenza_deaths \tab 770 \tab 0.71 \tab 27.45 \tab 213.93 \tab 0 \tab 0 \tab 0 \tab 10.0 \tab 6713 \tab ▇▁▁▁▁ \cr
+   pneumonia_influenza_or_covid_19_deaths \tab 483 \tab 0.82 \tab 1116.39 \tab 9482.70 \tab 0 \tab 0 \tab 14 \tab 235.5 \tab 317608 \tab ▇▁▁▁▁ \cr
 }
 
 

@@ -54,8 +54,8 @@ Table: Data summary\tabular{ll}{
 
 \strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
    skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
-   cumulative_rate \tab 1683 \tab 0.63 \tab 112.03 \tab 180.69 \tab 0 \tab 3.3 \tab 42.1 \tab 145.5 \tab 1702.7 \tab ▇▁▁▁▁ \cr
-   weekly_rate \tab 1683 \tab 0.63 \tab 10.60 \tab 18.83 \tab 0 \tab 0.5 \tab 4.4 \tab 12.3 \tab 271.0 \tab ▇▁▁▁▁ \cr
+   cumulative_rate \tab 918 \tab 0.8 \tab 140.93 \tab 208.85 \tab 0 \tab 5.9 \tab 63.15 \tab 197.02 \tab 1779.6 \tab ▇▁▁▁▁ \cr
+   weekly_rate \tab 918 \tab 0.8 \tab 10.78 \tab 18.03 \tab 0 \tab 0.7 \tab 5.00 \tab 13.33 \tab 282.0 \tab ▇▁▁▁▁ \cr
 }
 
 

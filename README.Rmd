@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # covdata <img src="man/figures/hex-covdata.png" align="right" width="240">
 
 <!-- badges: start -->
-[![R build status](https://github.com/kjhealy/covdata/workflows/R-CMD-check/badge.svg)](https://github.com/kjhealy/covdata/actions)
+[![R build status](https://github.com/kjhealy/covdata/workflows/R-CMD-check/badge.svg)](https://github.com/kjhealy/covdata/actions) 
 <!-- badges: end -->
 
 ## About the package
@@ -37,11 +37,12 @@ knitr::opts_chunk$set(
 
 - National-level short-term mortality fluctuations data from the [Human Mortality Database](https://www.mortality.org).
 - National-level all-cause and excess mortality estimates from the [_New York Times_](https://github.com/nytimes/covid-19-data).  
+- U.S. state-level excess mortality estimates from the [National Center for Health Statistics](https://data.cdc.gov/browse?category=NCHS)
 
 ### Mobility and activity data
 
 - Data from [Apple](http://apple.com/covid19) on relative trends in mobility in cities and countries since mid-January of 2020, based on usage of their Maps application.
-- Data from [Google](https://www.google.com/covid19/mobility/data_documentation.html) on relative trends in mobility in regions and countries since mid-January of 2020, based on location and activity information.
+- Data from [Google](https://www.google.com/covid19/mobility/data_documentation.html) on relative trends in mobility was previously included with this package but is now available in [covmobility](https://kjhealy.github.io/covmobility).
 
 ### Policy data
 
@@ -119,7 +120,7 @@ covus %>%
          state == "NJ")
 ```
 
-```{r plot,  fig.height=15, fig.width=8, dpi=150}
+```{r plot, fig.height=15, fig.width=8, dpi=150}
 nytcovcounty %>%
   mutate(uniq_name = paste(county, state)) %>% # Can't use FIPS because of how the NYT bundled cities
   group_by(uniq_name) %>%

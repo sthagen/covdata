@@ -3,9 +3,9 @@
 \docType{data}
 \name{covus}
 \alias{covus}
-\title{COVID-19 data for the USA, current as of Wednesday, July 22, 2020}
+\title{COVID-19 data for the USA, current as of Sunday, October 11, 2020}
 \format{
-A tibble with 131,665 rows and 7 columns
+A tibble with 372,630 rows and 7 columns
 \describe{
 \item{date}{Date in YYYY-MM-DD format (date)}
 \item{state}{Two letter State abbreviation (character)}
@@ -29,43 +29,44 @@ A dataset containing US state-level data on COVID-19
 Table: Data summary\tabular{ll}{
     \tab  \cr
    Name \tab covus \cr
-   Number of rows \tab 131665 \cr
+   Number of rows \tab 372630 \cr
    Number of columns \tab 7 \cr
    _______________________ \tab  \cr
    Column type frequency: \tab  \cr
-   character \tab 5 \cr
    Date \tab 1 \cr
+   character \tab 5 \cr
    numeric \tab 1 \cr
    ________________________ \tab  \cr
    Group variables \tab None \cr
 }
 
 
-\strong{Variable type: character}\tabular{lrrrrrrr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
-   state \tab 0 \tab 1.00 \tab 2 \tab 2 \tab 0 \tab 56 \tab 0 \cr
-   fips \tab 0 \tab 1.00 \tab 2 \tab 2 \tab 0 \tab 56 \tab 0 \cr
-   data_quality_grade \tab 18717 \tab 0.86 \tab 1 \tab 2 \tab 0 \tab 6 \tab 0 \cr
-   measure \tab 0 \tab 1.00 \tab 5 \tab 24 \tab 0 \tab 17 \tab 0 \cr
-   measure_label \tab 0 \tab 1.00 \tab 6 \tab 54 \tab 0 \tab 17 \tab 0 \cr
+\strong{Variable type: Date}\tabular{lrrlllr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
+   date \tab 0 \tab 1 \tab 2020-01-22 \tab 2020-10-11 \tab 2020-06-23 \tab 264 \cr
 }
 
 
-\strong{Variable type: Date}\tabular{lrrlllr}{
-   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab median \tab n_unique \cr
-   date \tab 0 \tab 1 \tab 2020-01-22 \tab 2020-07-21 \tab 2020-05-13 \tab 182 \cr
+\strong{Variable type: character}\tabular{lrrrrrrr}{
+   skim_variable \tab n_missing \tab complete_rate \tab min \tab max \tab empty \tab n_unique \tab whitespace \cr
+   state \tab 0 \tab 1.0 \tab 2 \tab 2 \tab 0 \tab 56 \tab 0 \cr
+   fips \tab 0 \tab 1.0 \tab 2 \tab 2 \tab 0 \tab 56 \tab 0 \cr
+   data_quality_grade \tab 35550 \tab 0.9 \tab 1 \tab 2 \tab 0 \tab 6 \tab 0 \cr
+   measure \tab 0 \tab 1.0 \tab 5 \tab 30 \tab 0 \tab 30 \tab 0 \cr
+   measure_label \tab 0 \tab 1.0 \tab 6 \tab 54 \tab 0 \tab 30 \tab 0 \cr
 }
 
 
 \strong{Variable type: numeric}\tabular{lrrrrrrrrrl}{
    skim_variable \tab n_missing \tab complete_rate \tab mean \tab sd \tab p0 \tab p25 \tab p50 \tab p75 \tab p100 \tab hist \cr
-   count \tab 75229 \tab 0.43 \tab 67001.62 \tab 284794.9 \tab 0 \tab 152 \tab 1322 \tab 18005 \tab 6536932 \tab ▇▁▁▁▁ \cr
+   count \tab 249267 \tab 0.33 \tab 183044.8 \tab 730733.3 \tab 0 \tab 284 \tab 3566 \tab 62030 \tab 16047004 \tab ▇▁▁▁▁ \cr
 }
 
 
 The measures tracked by the COVID tracking project are as follows:\tabular{ll}{
    measure \tab measure_label \cr
    positive \tab Positive Tests \cr
+   probable_cases \tab Probable Cases \cr
    negative \tab Negative Tests \cr
    pending \tab Pending Tests \cr
    hospitalized_currently \tab Currently Hospitalized \cr
@@ -82,14 +83,28 @@ The measures tracked by the COVID tracking project are as follows:\tabular{ll}{
    positive_cases_viral \tab Total number of positive cases measured with PCR tests \cr
    death_confirmed \tab Deaths Confirmed \cr
    death_probable \tab Deaths Probable \cr
+   total_test_encounters_viral \tab Total Test Encounters (PCR) \cr
+   total_tests_people_viral \tab Total PCR Tests (People) \cr
+   total_tests_antibody \tab Total Antibody Tests \cr
+   positive_tests_antibody \tab Positive Antibody Tests \cr
+   negative_tests_antibody \tab Negative Antibody Tests \cr
+   total_tests_people_antibody \tab Total Antibody Tests (People) \cr
+   positive_tests_people_antibody \tab Positive Antibody Tests (People) \cr
+   negative_tests_people_antibody \tab Negative Antibody Tests (People) \cr
+   total_tests_people_antigen \tab Total Antigen Tests (People) \cr
+   positive_tests_people_antigen \tab Positive Antigen Tests (People) \cr
+   total_tests_antigen \tab Total Antigen Tests \cr
+   positive_tests_antigen \tab Positive Antigen Tests \cr
 }
 
 
 Not all measures are reported by all states.
-The \code{positive}, \code{negative}, \code{death}, \code{death_confirmed}, and \code{death_probable} measures are \emph{cumulative} counts.
+The \code{positive}, \code{negative}, \code{death}, \code{death_confirmed}, \code{probable_cases} and \code{death_probable} measures are \emph{cumulative} counts.
 \code{death_confirmed} is the total number deaths of individuals with COVID-19 infection confirmed by a laboratory test.
 In states where the information is available, it tracks only those laboratory-confirmed deaths where COVID also contributed
 to the death according to the death certificate. \code{death_probable} is the total number of deaths where COVID was listed as a
 cause of death and there is not a laboratory test confirming COVID-19 infection.
+
+For further information on the COVID Tracking Project's measures, see \url{https://covidtracking.com/about-data/data-definitions}
 }
 \keyword{datasets}

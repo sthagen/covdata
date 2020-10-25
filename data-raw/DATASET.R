@@ -52,8 +52,8 @@ get_ecdc_csv <- function(url = "https://opendata.ecdc.europa.eu/covid19/casedist
 ### --------------------------------------------------------------------------------------
 
 ## Get Daily COVID Tracking Project Data
-## form is https://covidtracking.com/api/us/daily.csv
-get_uscovid_data <- function(url = "https://covidtracking.com/api/",
+## form is https://api.covidtracking.com/v1/us/daily.csv
+get_uscovid_data <- function(url = "https://api.covidtracking.com/v1/",
                              unit = c("states", "us"),
                              fname = "-",
                              date = lubridate::today(),
@@ -138,6 +138,7 @@ get_google_data <- function(url = "https://www.gstatic.com/covid19/mobility/",
                   country_region = col_character(),
                   sub_region_1 = col_character(),
                   sub_region_2 = col_character(),
+                  metro_area = col_character(),
                   iso_3166_2_code = col_character(),
                   census_fips_code = col_character(),
                   date = col_date(),
@@ -186,6 +187,7 @@ get_stmf <- function(url = "https://www.mortality.org/Public/STMF/Outputs",
 
 ## Get NYT data from their repo
 ## Generic NYT get
+
 get_nyt_data <- function(url = "https://github.com/nytimes/covid-19-data/raw/master/",
                         fname = "us-counties",
                         date = lubridate::today(),
@@ -284,37 +286,46 @@ get_corona_tscs <- function(url = "https://raw.githubusercontent.com/saudiwin/co
   cn_spec <- cols(
     record_id = col_character(),
     policy_id = col_character(),
-    recorded_date = col_datetime(),
+    entry_type = col_character(),
+    correct_type = col_character(),
+    update_type = col_character(),
+    update_level = col_character(),
+    description = col_character(),
     date_announced = col_datetime(),
     date_start = col_date(),
     date_end = col_date(),
-    entry_type = col_character(),
-    event_description = col_character(),
+    country = col_character(),
+    iso_a3 = col_character(),
+    iso_a2 = col_character(),
+    init_country_level = col_character(),
     domestic_policy = col_integer(),
+    province = col_character(),
+    city = col_character(),
     type = col_character(),
     type_sub_cat = col_character(),
-    type_text = col_integer(),
-    index_high_est = col_double(),
-    index_med_est = col_double(),
-    index_low_est  = col_double(),
-    index_country_rank = col_double(),
-    country = col_character(),
-    init_country_level = col_character(),
-    province = col_character(),
-    source_corr_type = col_character(),
+    type_text = col_character(),
+    school_status = col_character(),
     target_country = col_character(),
     target_geog_level = col_character(),
     target_region = col_character(),
     target_province = col_character(),
     target_city = col_character(),
     target_other = col_character(),
-    target_other = col_logical(),
+    target_who_what = col_character(),
     target_direction = col_character(),
     travel_mechanism = col_character(),
     compliance = col_character(),
     enforcer = col_character(),
-    link = col_character()
+    link = col_character(),
+    enforcer = col_character(),
+    index_high_est = col_double(),
+    index_med_est = col_double(),
+    index_low_est = col_double(),
+    index_country_rank = col_double(),
+    link = col_character(),
+    date_update = col_datetime()
   )
+
 
 
   janitor::clean_names(read_csv(tf, col_types = cn_spec))
@@ -416,17 +427,21 @@ nchs_tables <- tribble(
   ~name, ~sname, ~locator,
   "Death Counts by Sex, Age, and State", "SAS", "9bhg-hcku",
   "Weekly State Specific Updates", "WSS", "pj7m-y5uh",
-  "COVID-19 Case Surveillance Public Use Data", "CSPUD", "vbim-akqf"
+  "COVID-19 Case Surveillance Public Use Data", "CSPUD", "vbim-akqf",
+  "Weekly counts of death by jurisdiction and cause of death", "WDC", "u6jv-9ijr",
+  "Weekly counts 2014-2018", "WDC1418", "3yf8-kanr",
+  "Weekly counts 2019-2020", "WDC1920", "muzy-jte6"
 )
 
 get_nchs_data <- function(url = "https://data.cdc.gov/api/views",
-                             sname = c("SAS", "WSS", "CSPUD"),
+                             sname = c("SAS", "WSS", "CSPUD", "WDC", "WDC1418", "WDC1920"),
                              fname = "-",
                              date = lubridate::today(),
                              ext = "csv",
                              dest = "data-raw/data",
                              save_file = c("y", "n"),
-                          clean_names = c("y", "n")) {
+                             clean_names = c("y", "n"),
+                          cols = readr::cols()) {
   sname <- match.arg(sname)
   save_file <- match.arg(save_file)
   clean_names <- match.arg(clean_names)
@@ -447,8 +462,8 @@ get_nchs_data <- function(url = "https://data.cdc.gov/api/views",
          )
 
   switch(clean_names,
-         y = janitor::clean_names(read_csv(tf)),
-         n = read_csv(tf)
+         y = janitor::clean_names(read_csv(tf, col_types = cols)),
+         n = read_csv(tf, col_types = cols)
          )
 }
 
@@ -618,7 +633,7 @@ countries <- covnat %>%
 ### --------------------------------------------------------------------------------------
 
 ## US state data
-cov_us_raw <- get_uscovid_data(url = "https://covidtracking.com/api/v1/", save_file = "n")
+cov_us_raw <- get_uscovid_data(url = "https://api.covidtracking.com/v1/", save_file = "n")
 
 ## Drop deprecated measures and unneeded variables
 drop_cols <- c("check_time_et", "commercial_score", "date_checked",
@@ -627,13 +642,13 @@ drop_cols <- c("check_time_et", "commercial_score", "date_checked",
                "negative_increase", "negative_regular_score",
                "negative_score", "pos_neg", "positive_increase",
                "positive_score", "score", "total", "total_test_results",
-               "total_test_results_increase")
+               "total_test_results_increase", "total_test_results_source")
 
 covus <- cov_us_raw %>%
   mutate(date = lubridate::ymd(date)) %>%
   select(!all_of(drop_cols)) %>%
   select(date, state, fips, data_quality_grade, everything()) %>%
-  pivot_longer(positive:death_probable,
+  pivot_longer(positive:positive_tests_antigen,
                names_to = "measure", values_to = "count")
 
 covus_measure_labels <- tribble(
@@ -650,11 +665,25 @@ covus_measure_labels <- tribble(
   "on_ventilator_cumulative", "Cumulative on Ventilator",
   "on_ventilator_currently",  "Currently on Ventilator",
   "pending",                  "Pending Tests",
+  "probable_cases",           "Probable Cases",
   "positive",                 "Positive Tests",
   "positive_cases_viral", "Total number of positive cases measured with PCR tests",
   "positive_tests_viral", "Total number of positive PCR tests",
   "recovered", "Recovered",
-  "total_tests_viral", "Total number of PCR tests performed"
+  "total_tests_viral", "Total number of PCR tests performed",
+  "total_test_encounters_viral", "Total Test Encounters (PCR)",
+  "total_tests_people_viral", "Total PCR Tests (People)",
+  "total_tests_antibody", "Total Antibody Tests",
+  "positive_tests_antibody", "Positive Antibody Tests",
+  "negative_tests_antibody", "Negative Antibody Tests",
+  "total_tests_people_antibody", "Total Antibody Tests (People)",
+  "positive_tests_people_antibody", "Positive Antibody Tests (People)",
+  "negative_tests_people_antibody", "Negative Antibody Tests (People)",
+  "total_tests_people_antigen", "Total Antigen Tests (People)",
+  "negative_tests_people_antigen", "Negative Antigen Tests (People)",
+  "positive_tests_people_antigen",  "Positive Antigen Tests (People)",
+  "total_tests_antigen", "Total Antigen Tests",
+  "positive_tests_antigen", "Positive Antigen Tests"
 )
 
 covus <- covus %>%
@@ -854,10 +883,38 @@ nchs_wss <- nchs_wss_raw %>%
          dist_pct = distribution_of_covid_19_deaths_percent,
          uw_dist_pop_pct = unweighted_distribution_of_population_percent,
          wt_dist_pop_pct = weighted_distribution_of_population_percent) %>%
-  mutate(state = stringr::str_replace(state, "<sup>5</sup>", ""))
+  mutate(state = stringr::str_replace(state, "<sup>5</sup>", "")) %>%
+  type_convert(col_types = cols(
+    data_as_of = col_date(format = us_style),
+    start_week = col_date(format = us_style),
+    end_week = col_date(format = us_style),
+    state = "c",
+    group = "c",
+    deaths = "i",
+    dist_pct = "d",
+    uw_dist_pop_pct = "d",
+    wt_dist_pop_pct = "d"
+  ))
+
+cspud_style <-  "%Y/%m/%d"
+
+cspud_colspec <- cols(
+  cdc_report_dt = col_date(format = cspud_style),
+  pos_spec_dt = col_date(format = cspud_style),
+  onset_dt = col_date(format = cspud_style),
+  current_status = "c",
+  sex = "c",
+  age_group = "c",
+  `Race and ethnicity (combined)` = "c",
+  hosp_yn = "c",
+  icu_yn = "c",
+  medcond_yn = "c"
+)
 
 nchs_cspud_raw <- get_nchs_data(sname = "CSPUD",
-                                save_file = "n")
+                                clean_names = "y",
+                                save_file = "n",
+                                cols = cspud_colspec)
 
 nchs_pud <- nchs_cspud_raw %>%
   mutate(current_status = recode(current_status,
@@ -872,6 +929,87 @@ nchs_pud <- nchs_cspud_raw %>%
                                                             "NH/PI")) %>%
   rename(race_ethnicity = race_and_ethnicity_combined)
 
+wdc_style <-  "%Y-%m-%d"
+
+wdc_colspec <- cols(
+  Jurisdiction = "c",
+  `Week Ending Date` = col_date(format = wdc_style),
+  `State Abbreviation` = "c",
+  Year = "i",
+  Week = "i",
+  `Cause Group` = "c",
+  `Number of Deaths` = "i",
+  `Cause Subgroup` = "c",
+  `Time Period` = "c",
+  Suppress = "l",
+  Note = "c",
+  `Average Number of Deaths in Time Period` = "d",
+  `Difference from 2015-2019 to 2020` = "d",
+  `Percent Difference from 2015-2019 to 2020` = "d",
+  Type = "c"
+)
+
+# nchs_wdc_old <- get_nchs_data(sname = "WDC",
+#                           clean_names = "y",
+#                           save_file = "n",
+#                           cols = wdc_colspec)
+
+
+nchs_wdc1418_raw <- get_nchs_data(sname = "WDC1418",
+                          clean_names = "n",
+                          save_file = "n")
+
+nchs_wdc1418 <- nchs_wdc1418_raw %>%
+  pivot_longer(`All  Cause`:`Cerebrovascular diseases (I60-I69)`, names_to = "cause_detailed", values_to = "n") %>%
+  janitor::clean_names() %>%
+  mutate(week_ending_date = lubridate::mdy(week_ending_date)) %>%
+  rename(jurisdiction = jurisdiction_of_occurrence,
+         year = mmwr_year,
+         week = mmwr_week) %>%
+  select(jurisdiction, year, week, week_ending_date, cause_detailed, n) %>%
+  mutate(cause_detailed = stringr::str_squish(cause_detailed))
+
+
+nchs_wdc1920_raw <- get_nchs_data(sname = "WDC1920",
+                              clean_names = "n",
+                              save_file = "n")
+
+nchs_wdc1920 <- nchs_wdc1920_raw %>%
+  pivot_longer(`All Cause`:`COVID-19 (U071, Underlying Cause of Death)`, names_to = "cause_detailed", values_to = "n") %>%
+  janitor::clean_names() %>%
+  mutate(week_ending_date = lubridate::mdy(week_ending_date)) %>%
+  rename(jurisdiction = jurisdiction_of_occurrence,
+         year = mmwr_year,
+         week = mmwr_week) %>%
+  select(jurisdiction, year, week, week_ending_date, cause_detailed, n) %>%
+  mutate(cause_detailed = stringr::str_squish(cause_detailed))
+
+## New NCHS WDC
+nchs_wdc <- bind_rows(nchs_wdc1418, nchs_wdc1920) %>%
+    arrange(jurisdiction, year, week, week_ending_date, cause_detailed) %>%
+    mutate(cause = case_when(
+      cause_detailed == "All Cause"                                                                                        ~ "All Cause",
+      cause_detailed == "Alzheimer disease (G30)"                                                                          ~ "Alzheimer's",
+      cause_detailed == "Cerebrovascular diseases (I60-I69)"                                                               ~ "Cerebrovascular Diseases",
+      cause_detailed == "Chronic lower respiratory diseases (J40-J47)"                                                     ~ "Chronic Lower Respiratory Diseases",
+      cause_detailed == "Diabetes mellitus (E10-E14)"                                                                      ~ "Diabetes",
+      cause_detailed == "Diseases of heart (I00-I09,I11,I13,I20-I51)"                                                      ~ "Diseases of the Heart",
+      cause_detailed == "Influenza and pneumonia (J10-J18)"                                                                ~ "Influenza and Pneumonia",
+      cause_detailed == "Malignant neoplasms (C00-C97)"                                                                    ~ "Cancer",
+      cause_detailed == "Natural Cause"                                                                                    ~ "Natural Causes",
+      cause_detailed == "Nephritis, nephrotic syndrome and nephrosis (N00-N07,N17-N19,N25-N27)"                            ~ "Kidney Diseases",
+      cause_detailed == "Other diseases of respiratory system (J00-J06,J30-J39,J67,J70-J98)"                               ~ "Other Respiratory disease",
+      cause_detailed == "Septicemia (A40-A41)"                                                                             ~ "Septicemia",
+      cause_detailed == "Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified (R00-R99)"~ "Other",
+      cause_detailed == "COVID-19 (U071, Multiple Cause of Death)"                                                         ~ "COVID-19 Multiple cause",
+      cause_detailed == "COVID-19 (U071, Underlying Cause of Death)"                                                       ~ "COVID-19 Underlying",
+      cause_detailed == "Influenza and pneumonia (J09-J18)"                                                                ~ "Influenza and Pneumonia",
+      TRUE ~ "Other")
+    )
+
+
+
+
 ## --------------------------------------------------------------------------------------
 ### Apple and Google
 ### --------------------------------------------------------------------------------------
@@ -884,19 +1022,6 @@ apple_mobility <- get_apple_data() %>%
     date = stringr::str_replace_all(date, "_", "-"),
     date = as_date(date)) %>%
   rename(score = index)
-
-## Google Mobility Data
-
-google_mobility <- get_google_data() %>%
-  rename(iso3166_2 = iso_3166_2_code,
-    retail = retail_and_recreation_percent_change_from_baseline,
-         grocery = grocery_and_pharmacy_percent_change_from_baseline,
-         parks = parks_percent_change_from_baseline,
-         transit = transit_stations_percent_change_from_baseline,
-         workplaces = workplaces_percent_change_from_baseline,
-         residential = residential_percent_change_from_baseline) %>%
-  pivot_longer(retail:residential, names_to = "type", values_to = "pct_diff")
-
 
 ### --------------------------------------------------------------------------------------
 ### Get mortality.org data
@@ -927,7 +1052,8 @@ md_ccodes <- tibble(country_code = unique(stmf$country_code)) %>%
          cname = replace(cname, country_code == "FRATNP", "France"),
          iso2 = replace(iso2, country_code == "FRATNP", "FR"),
          cname = replace(cname, country_code == "GBRTENW", "England and Wales"),
-         cname = replace(cname, country_code == "GBR_SCO", "Scotland")
+         cname = replace(cname, country_code == "GBR_SCO", "Scotland"),
+         cname = replace(cname, country_code == "GBR_NIR", "Northern Ireland")
          ) %>%
   left_join(countries)
 
@@ -941,15 +1067,7 @@ stmf <- left_join(stmf, md_ccodes) %>%
 ### --------------------------------------------------------------------------------------
 coronanet_raw <- get_corona_tscs()
 
-cnet_vars <- c("record_id", "policy_id", "recorded_date", "date_announced", "date_start", "date_end",
-               "entry_type", "event_description", "domestic_policy", "type", "type_sub_cat",
-               "type_text", "index_high_est", "index_med_est", "index_low_est", "index_country_rank",
-               "country", "init_country_level", "province", "target_country", "target_geog_level",
-               "target_region", "target_province", "target_city", "target_other", "target_who_what",
-               "target_direction", "travel_mechanism", "compliance", "enforcer", "link", "iso_a3", "iso_a2")
-
 coronanet <- coronanet_raw %>%
-  select(all_of(cnet_vars)) %>%
   rename(iso3 = iso_a3, iso2 = iso_a2)
 
 ### --------------------------------------------------------------------------------------
@@ -971,9 +1089,8 @@ uspop <- read_csv(here("data-raw/data/PEP_2018_PEPSR6H_with_ann.csv")) %>%
 ### Write out the data objects
 ### --------------------------------------------------------------------------------------
 
-## Apple and Google
+## Apple
 usethis::use_data(apple_mobility, overwrite = TRUE, compress = "xz")
-usethis::use_data(google_mobility, overwrite = TRUE, compress = "xz")
 
 ## CDC surveillance
 usethis::use_data(cdc_hospitalizations, overwrite = TRUE, compress = "xz")
@@ -989,6 +1106,7 @@ usethis::use_data(nssp_covid_er_reg, overwrite = TRUE, compress = "xz")
 usethis::use_data(nchs_sas, overwrite = TRUE, compress = "xz")
 usethis::use_data(nchs_wss, overwrite = TRUE, compress = "xz")
 usethis::use_data(nchs_pud, overwrite = TRUE, compress = "xz")
+usethis::use_data(nchs_wdc, overwrite = TRUE, compress = "xz")
 
 ## CoronaNet
 usethis::use_data(coronanet, overwrite = TRUE, compress = "xz")
@@ -998,7 +1116,6 @@ usethis::use_data(covus, overwrite = TRUE, compress = "xz")
 
 usethis::use_data(covus_race, overwrite = TRUE, compress = "xz")
 usethis::use_data(covus_ethnicity, overwrite = TRUE, compress = "xz")
-
 
 ## Country codes
 usethis::use_data(countries, overwrite = TRUE, compress = "xz")
@@ -1020,12 +1137,11 @@ usethis::use_data(uspop, overwrite = TRUE, compress = "xz")
 
 
 ## rd skeleton
-#sinew::makeOxygen("uspop")
-sinew::makeOxygen("nchs_pud")
+#sinew::makeOxygen("")
 
 document()
 
-knit("README.Rmd")
+system("Rscript -e 'knitr::knit(\"README.Rmd\")'")
 system("sed -i '' '1,4d' README.md")
 
 

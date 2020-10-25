@@ -66,11 +66,13 @@
 #' `r knitr::kable(unique(covus[, c("measure", "measure_label")]))`
 #'
 #' Not all measures are reported by all states.
-#' The `positive`, `negative`, `death`, `death_confirmed`, and `death_probable` measures are _cumulative_ counts.
+#' The `positive`, `negative`, `death`, `death_confirmed`, `probable_cases` and `death_probable` measures are _cumulative_ counts.
 #' `death_confirmed` is the total number deaths of individuals with COVID-19 infection confirmed by a laboratory test.
 #' In states where the information is available, it tracks only those laboratory-confirmed deaths where COVID also contributed
 #' to the death according to the death certificate. `death_probable` is the total number of deaths where COVID was listed as a
 #' cause of death and there is not a laboratory test confirming COVID-19 infection.
+#'
+#' For further information on the COVID Tracking Project's measures, see \url{https://covidtracking.com/about-data/data-definitions}
 #' @source The COVID-19 Tracking Project \url{https://covidtracking.com}
 "covus"
 
@@ -534,30 +536,6 @@
 "apple_mobility"
 
 
-## Google Mobility Data
-#' @title Google Mobility Data
-#' @description Data from Google's Community Mobility Reports on relative changes in movement trends by location type.
-#' @format A data frame with `r fmt_nr(google_mobility)` rows and `r fmt_nc(google_mobility)` variables:
-#' \describe{
-#'   \item{\code{country_region_code}}{character Country Code}
-#'   \item{\code{country_region}}{character Country or Region name}
-#'   \item{\code{sub_region_1}}{character Subregion (e.g. US state) name}
-#'   \item{\code{sub_region_2}}{character Subregion (e.g. US county) name}
-#'   \item{\code{iso3166_2}}{character ISO 3166-2 Country/Region code}
-#'   \item{\code{census_fips_code}}{character US Census FIPS code}
-#'   \item{\code{date}}{double Date in yyyy-mm-dd format}
-#'   \item{\code{type}}{character Type of location. Values are retail, grocery (and pharmacy), parts, transit (hubs/stations), workplaces, and residential}
-#'   \item{\code{pct_diff}}{integer Percent change from baseline activity}
-#'}
-#' @details
-#' ```{r, results = "asis", echo = FALSE}
-#' skimr::skim(google_mobility)
-#' ```
-#'
-#' Location accuracy and the understanding of categorized places varies from region to region, so Google does not recommend using this data to compare changes between countries, or between regions with different characteristics (e.g. rural versus urban areas). Regions or categories are omitted if Google does not have have sufficient statistically significant levels of data for it. Changes for each day are compared to a baseline value for that day of the week. The baseline is the median value, for the corresponding day of the week, during the 5-week period Jan 3–Feb 6, 2020. What data is included in the calculation depends on user settings, connectivity, and whether it meets our privacy threshold. If the privacy threshold isn’t met (when somewhere isn’t busy enough to ensure anonymity) we don’t show a change for the day. As a result, you may encounter empty fields for certain places and dates. We calculate these insights based on data from users who have opted-in to Location History for their Google Account, so the data represents a sample of our users. As with all samples, this may or may not represent the exact behavior of a wider population.
-#' @author Kieran Healy
-#' @source Google LLC "Google COVID-19 Community Mobility Reports." https://www.google.com/covid19/mobility/ Accessed: `r Sys.Date()`
-"google_mobility"
 
 #' @title CoronaNet Government Response Project data
 #' @description Contains variables from the CoronaNet Government Response Project (`https://coronanet-project.org`), representing national and sub-national policy event data from more than 140 countries since January 1st, 2020. The data include source links, descriptions, targets (i.e. other countries), the type and level of enforcement, and a comprehensive set of policy types. See below for citation information.
@@ -696,10 +674,12 @@
 #' In this release, counts of deaths are provided by the race and Hispanic origin of the decedent.
 #' @format A tibble with `r fmt_nr(nchs_wss)` rows and `r fmt_nc(nchs_wss)` variables:
 #' \describe{
-#'   \item{\code{data_as_of}}{character Date of analysis}
+#'   \item{\code{data_as_of}}{date Date of analysis}
+#'   \item{\code{start_week}}{date Start date of coverage}
+#'   \item{\code{end_week}}{date End date of coverage}
 #'   \item{\code{state}}{character Geographical unit. One of: the United States, a U.S. State, the District of Columbia, or New York City. New York state measures *do not* include New York City }
 #'   \item{\code{group}}{character Population group}
-#'   \item{\code{deaths}}{double }
+#'   \item{\code{deaths}}{integer Count of deaths}
 #'   \item{\code{dist_pct}}{double COLUMN_DESCRIPTION}
 #'   \item{\code{uw_dist_pop_pct}}{double COLUMN_DESCRIPTION}
 #'   \item{\code{wt_dist_pop_pct}}{double COLUMN_DESCRIPTION}
@@ -725,6 +705,24 @@
 #' @source National Center for Health Statistics \url{https://data.cdc.gov/NCHS/Provisional-Death-Counts-for-Coronavirus-Disease-C/pj7m-y5uh}
 "nchs_wss"
 
+#' @title Weekly Counts of Deaths by State and Select Causes 2014-2020
+#' @description Final counts of deaths by the week the deaths occurred, by state of occurrence, and by select causes of death for 2014-2018, and Provisional counts of deaths by the week the deaths occurred, by state of occurrence, and by select underlying causes of death for 2019-2020. The dataset also includes weekly provisional counts of death for COVID-19, coded to ICD-10 code U07.1 as an underlying or multiple cause of death.
+#' @format A data frame with `r fmt_nr(nchs_wdc)` rows and `r fmt_nc(nchs_wdc)` variables:
+#' \describe{
+#'   \item{\code{jurisdiction}}{character Jurisdiction of Occurrence}
+#'   \item{\code{year}}{double MMWR Year}
+#'   \item{\code{week}}{double MMWR Week}
+#'   \item{\code{week_ending_date}}{double MMWR Week ending date}
+#'   \item{\code{cause_detailed}}{character Cause with ICD Codes}
+#'   \item{\code{n}}{double Count of deaths}
+#'   \item{\code{cause}}{character Cause of death}
+#'}
+#' @details For 2014-2018, death counts in this dataset were derived from the National Vital Statistics System database that provides the most timely access to the data. Therefore, counts may differ slightly from final data due to differences in processing, recoding, and imputation. For 2019-2020, the dataset also includes weekly provisional counts of death for COVID-19, coded to ICD-10 code U07.1 as an underlying or multiple cause of death.
+#' Number of deaths reported in this table are the total number of deaths received and coded as of the date of analysis, and do not represent all deaths that occurred in that period. Data for 2019 and 2020 are provisional and may be incomplete because of the lag in time between when the death occurred and when the death certificate is completed, submitted to NCHS and processed for reporting purposes. Causes of death included in this dataset are tabulated by underlying cause of death ICD-10 codes. COVID-19 deaths by underlying cause and multiple cause of death are also included.
+#' @author Kieran Healy
+#' @source 2014-2018: \url{https://data.cdc.gov/NCHS/Weekly-Counts-of-Deaths-by-State-and-Select-Causes/3yf8-kanr}. 2019-2020: \url{https://data.cdc.gov/NCHS/Weekly-Counts-of-Deaths-by-State-and-Select-Causes/muzy-jte6}
+#' @references
+"nchs_wdc"
 
 #' @title COVID-19 Case Surveillance Public Use Data
 #' @description Deidentified patient-level data reported to U.S. states and autonomous reporting entities, including New York City and the District of Columbia (D.C.), as well as U.S. territories and states.
